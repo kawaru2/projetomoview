@@ -91,7 +91,10 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+}
+
+.container {
+  transition: transform .5s ease;
 }
 
 .form {
@@ -152,7 +155,7 @@ body {
   position: relative;
 }
 
-#login, #senha {
+.campo {
   width: 100%;
   height: 70px;
   border-radius: 10px;
@@ -166,12 +169,12 @@ body {
   transition: border-color .25s ease, background-color .25s ease, box-shadow .25s ease;
 }
 
-#login:hover, #senha:hover {
+.campo:hover {
   border-color: rgba(16, 16, 16, .9);
   background-color: var(--onFocus);
 }
 
-#login:focus, #senha:focus {
+.campo:focus {
   border-color: var(--cor-primaria);
   background-color: var(--onFocus);
   box-shadow: 0 0 0 4px rgba(227, 19, 19, .18);
@@ -189,7 +192,7 @@ body {
   transition: top .25s ease, font-size .25s ease, color .25s ease, background-color .25s ease;
 }
 
-#login:focus + #placeholderLogin {
+.campo:focus + #placeholderLogin {
   top: 8px;
   left: 20px;
   font-size: .9rem;
@@ -210,7 +213,7 @@ body {
   pointer-events: none;
 }
 
-#senha:focus + #placeholderSenha {
+.campo:focus + #placeholderSenha {
   top: 108px;
   left: 20px;
   font-size: .9rem;
@@ -242,6 +245,35 @@ body {
   border: 2px solid var(--cor-primaria);
   cursor: pointer;
 }
+
+/* Efeito de "duas telas", conteúdo atrás do form (login/cadastro). */
+
+.containerForm {
+  /* Efeito de profundidade durante a transição, deixando mais realista o conteúdo em 3d */
+  perspective: 1000px;
+}
+
+.containerFormChange {
+  position: relative;
+  transition: transform .8s ease;
+  transform-style: preserve-3d;
+}
+
+.isActive {
+  transform: rotateY(180deg);
+}
+
+.front, .back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+/* ================================================================ */
 
 @keyframes buttonAnimation {
   0% {

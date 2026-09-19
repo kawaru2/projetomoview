@@ -35,25 +35,40 @@ export function Login() {
 
   return (
     <main className="telaLogin">
-      <form className="form">
-        <h1 className="titleLogin">Moview</h1>
-        {/* A ideia é fazer o cadastro na mesma página usando um efeito de transição do formulário. */}
-        <button type="button" id="btnRegister" onClick={() => setChangeForm(!changeForm)}>
-          Criar conta
-        </button>
-        <div className="camposLoginSenha">
-          <input type="text" name="login" id="login" autoComplete="off" onChange={(e) => setLogin(e.target.value)} />
-          <label htmlFor="login" id="placeholderLogin">Login</label>
-          <input type="password" name="senha" id="senha" autoComplete="new-password" onChange={(e) => setSenha(e.target.value)} />
-          <label htmlFor="senha" id="placeholderSenha">Senha</label>
+      <div className="containerForm">
+        <div className={`containerFormChange ${changeForm ? "isActive" : ""}`}>
+          <form className="form front">
+            <h1 className="titleLogin">Moview</h1>
+            {/* A ideia é fazer o cadastro na mesma página usando um efeito de transição do formulário. */}
+            <button type="button" id="btnRegister" onClick={() => setChangeForm(!changeForm)}>
+              Criar conta
+            </button>
+            <div className="camposLoginSenha">
+              <input type="text" name="login" className="campo" autoComplete="off" onChange={(e) => setLogin(e.target.value)} />
+              <label htmlFor="login" id="placeholderLogin">Login</label>
+              <input type="password" name="senha" className="campo" autoComplete="new-password" onChange={(e) => setSenha(e.target.value)} />
+              <label htmlFor="senha" id="placeholderSenha">Senha</label>
+            </div>
+            <div className="entrarOuMudarSenha">
+              <button type="button" className="btnEntrar" title="Entrar" onClick={toastEvent}>Entrar</button>
+              <button type="button" className="btnEsqueciSenha" title="Esqueceu a senha?" onClick={() => {navigate("/recuperarSenha")}}>Esqueceu a senha?</button>
+            </div>
+          </form>
+          <form className="form back">
+          <div className="camposLoginSenha">
+            <label htmlFor="novoNome" id="placeholderNovoNome">Nome Completo</label>
+            <input type="text" className="campo" id="novoNome" />
+            <label htmlFor="novoId" id="placeholderNovoId">Seu ID</label>
+            <input type="text" className="campo" id="novoId" />
+            <label htmlFor="novaSenha" id="placeholderNovaSenha">Sua senha (4 - 8 digitos)</label>
+            <input type="password" className="campo" id="novaSenha" />
+            <button type="button" className="btnEntrar">Cadastrar</button>
+          </div>
+          <button id="btnRegister" type="button" onClick={() => setChangeForm(!changeForm)}>Fazer Login</button>
+          </form>
         </div>
-        <div className="entrarOuMudarSenha">
-          <button type="button" className="btnEntrar" title="Entrar" onClick={toastEvent}>Entrar</button>
-    
-          <button type="button" className="btnEsqueciSenha" title="Esqueceu a senha?" onClick={() => {navigate("/recuperarSenha")}}>Esqueceu a senha?</button>
-          <ToastContainer />
-        </div>
-      </form>
+      </div>
+      <ToastContainer />
     </main>
   )
 }
