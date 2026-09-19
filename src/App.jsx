@@ -5,6 +5,7 @@ import './App.css'
 // import Filmes from './pages/Filmes'
 // import Sobre from './pages/Sobre'
 import { Login } from './pages/Login'
+import { RecuperarSenha } from './pages/recuperarSenha'
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
         <Route path="/Login" element={<Login />} />
 
         {/* <Route path="*" element={<Home />} /> */}
+
+        <Route path="/recuperarSenha" element={<RecuperarSenha />} />
       </Routes>
 
       {/* <Footer /> */}

@@ -16,6 +16,7 @@
 }
 
 #root {
+  min-height: 100vh;
   background-image: linear-gradient(to bottom, var(--cor-primaria) 0%, var(--cor-secundaria) 90%);
 }
 
@@ -250,24 +251,10 @@ body {
     border-left: 2px solid transparent;
   }
 
-  25% {
-    border-top: 2px solid var(--border-effect);
-    border-right: 2px solid transparent;
-    border-bottom: 2px solid transparent;
-    border-left: 2px solid transparent;
-  }
-
   50% {
     border-top: 2px solid var(--border-effect);
     border-right: 2px solid var(--border-effect);
     border-bottom: 2px solid transparent;
-    border-left: 2px solid transparent;
-  }
-
-  75% {
-    border-top: 2px solid var(--border-effect);
-    border-right: 2px solid var(--border-effect);
-    border-bottom: 2px solid var(--border-effect);
     border-left: 2px solid transparent;
   }
 
