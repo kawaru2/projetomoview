@@ -194,11 +194,9 @@ body {
 
 .campo:focus + #placeholderLogin {
   top: 8px;
-  left: 20px;
   font-size: .9rem;
   color: var(--cor-primaria);
   padding: 0 6px;
-  border-radius: 4px;
 }
 
 #placeholderSenha {
@@ -271,6 +269,70 @@ body {
 
 .back {
   transform: rotateY(180deg);
+}
+
+.titleFormBack {
+  font-size: 2rem;
+  color: var(--cor-contraste);
+  text-shadow: 2px 2px 3px var(--text-shadow);
+  margin-top: 20px;
+}
+
+#placeholderNovoNome {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  font-size: 1.3rem;
+  color: var(--text-default);
+  pointer-events: none;
+  line-height: 1;
+  transition: top .25s ease, font-size .25s ease, color .25s ease, background-color .25s ease;
+}
+
+#placeholderNovoId {
+  position: absolute;
+  top: 120px;
+  left: 20px;
+  z-index: 1;
+  font-size: 1.3rem;
+  color: var(--text-default);
+  pointer-events: none;
+  line-height: 1;
+  transition: top .25s ease, font-size .25s ease, color .25s ease, background-color .25s ease;
+}
+
+#placeholderNovaSenha {
+  position: absolute;
+  top: 220px;
+  left: 20px;
+  z-index: 1;
+  font-size: 1.3rem;
+  color: var(--text-default);
+  pointer-events: none;
+  line-height: 1;
+  transition: top .25s ease, font-size .25s ease, color .25s ease, background-color .25s ease;
+}
+
+.campo:focus + #placeholderNovoNome {
+  top: 8px;
+  font-size: .9rem;
+  color: var(--cor-primaria);
+  padding: 0 6px;
+}
+
+.campo:focus + #placeholderNovoId {
+  top: 108px;
+  font-size: .9rem;
+  color: var(--cor-primaria);
+  padding: 0 6px;
+}
+
+.campo:focus + #placeholderNovaSenha {
+  top: 208px;
+  font-size: .9rem;
+  color: var(--cor-primaria);
+  padding: 0 6px;
 }
 
 /* ================================================================ */

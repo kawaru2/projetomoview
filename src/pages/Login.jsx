@@ -8,6 +8,9 @@ export function Login() {
   // A lógica vai mudar futuramente para fazer a verificação do ID e da senha se são válidas.
   const [ login, setLogin ] = useState("");
   const [ senha, setSenha ] = useState("");
+  const [ campoNovoNome, setCampoNovoNome ] = useState("");
+  const [ campoNovoId, setCampoNovoId ] = useState("");
+  const [ campoNovaSenha, setCampoNovaSenha ] = useState("");
   const [ changeForm, setChangeForm ] = useState(false);
 
   function toastEvent() {
@@ -33,6 +36,35 @@ export function Login() {
     }
   }
 
+  function toastEventBack() {
+    if(!campoNovoNome || !campoNovoId || !campoNovaSenha) {
+      toast.error("Preencha todos os campos!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      })
+    } else {
+      toast.success("Conta criada com sucesso", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      })
+
+      setTimeout(() => {
+        setChangeForm(!changeForm)
+        setCampoNovoNome("")
+        setCampoNovoId("")
+        setCampoNovaSenha("")
+      }, 4000)
+    }
+  }
+
   return (
     <main className="telaLogin">
       <div className="containerForm">
@@ -55,16 +87,17 @@ export function Login() {
             </div>
           </form>
           <form className="form back">
-          <div className="camposLoginSenha">
-            <label htmlFor="novoNome" id="placeholderNovoNome">Nome Completo</label>
-            <input type="text" className="campo" id="novoNome" />
-            <label htmlFor="novoId" id="placeholderNovoId">Seu ID</label>
-            <input type="text" className="campo" id="novoId" />
-            <label htmlFor="novaSenha" id="placeholderNovaSenha">Sua senha (4 - 8 digitos)</label>
-            <input type="password" className="campo" id="novaSenha" />
-            <button type="button" className="btnEntrar">Cadastrar</button>
-          </div>
-          <button id="btnRegister" type="button" onClick={() => setChangeForm(!changeForm)}>Fazer Login</button>
+            <h2 className="titleFormBack">Criar conta</h2>
+            <div className="camposLoginSenha">
+              <input autoComplete="off" type="text" className="campo" id="novoNome" onChange={(e) => setCampoNovoNome(e.target.value)} value={campoNovoNome} />
+              <label htmlFor="novoNome" id="placeholderNovoNome">Nome Completo</label>
+              <input autoComplete="off" type="text" className="campo" id="novoId" onChange={(e) => setCampoNovoId(e.target.value)} value={campoNovoId} />
+              <label htmlFor="novoId" id="placeholderNovoId">Seu ID</label>
+              <input autoComplete="new-password" type="password" className="campo" id="novaSenha" onChange={(e) => setCampoNovaSenha(e.target.value)} value={campoNovaSenha} />
+              <label htmlFor="novaSenha" id="placeholderNovaSenha">Senha (4 - 8 digitos)</label>
+              <button type="button" className="btnEntrar" onClick={toastEventBack}>Cadastrar</button>
+            </div>
+            <button id="btnRegister" type="button" onClick={() => setChangeForm(!changeForm)}>Fazer Login</button>
           </form>
         </div>
       </div>
