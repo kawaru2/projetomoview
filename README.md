@@ -147,6 +147,13 @@ Este projeto está em desenvolvimento contínuo, com foco em evoluir a interface
 
 Projeto desenvolvido como estudo e protótipo de front-end em React.
 
-"A experiência do usuário é o maior diferencial de um produto digital."
+> "A experiência do usuário é o maior diferencial de um produto digital."
 
-João Barros
+<div align="center">
+  <h3 style="color:#61DAFB; margin: 1rem 0 0.5rem; font-size: 1.7rem;">
+    João Barros
+  </h3>
+  <p style="margin: 0; font-weight: 700; letter-spacing: 0.08em; color: #f1f5f9; text-transform: uppercase;">
+    Autor
+  </p>
+</div>
