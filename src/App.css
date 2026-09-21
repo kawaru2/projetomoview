@@ -53,6 +53,8 @@ body {
 
 #imgLogo {
   border-radius: 10px;
+  height: 70px;
+  width: 90px;
 }
 
 #nomeEmpresa {
@@ -91,6 +93,10 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
+  background-image: url("./assets/backgroundLogin.svg");
+  background-position: center bottom;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .container {
@@ -107,9 +113,9 @@ body {
   align-items: center;
   background: linear-gradient(
 
-    rgba(255, 255, 255, .3),
+    rgba(156, 154, 154, 0.4),
 
-    rgba(255, 255, 255, .1));
+    rgba(107, 106, 106, 0.4));
 
   border: 1px solid rgba(255, 255, 255, .4);
   box-shadow: 0 4px 20px rgba(0, 0, 0, .2);
@@ -177,7 +183,7 @@ body {
 .campo:focus {
   border-color: var(--cor-primaria);
   background-color: var(--onFocus);
-  box-shadow: 0 0 0 4px rgba(227, 19, 19, .18);
+  box-shadow: 0 0 0 4px rgba(227, 19, 19, .38);
 }
 
 #placeholderLogin {

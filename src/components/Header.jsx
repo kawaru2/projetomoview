@@ -1,5 +1,7 @@
 import {Link, NavLink} from 'react-router-dom'
 import {useMoviewContext} from "../hooks/useMoviewContext"
+import logo from '../assets/logo.svg'
+
 export default function Header() {
   const {isLogado, user} = useMoviewContext();
   
@@ -12,7 +14,7 @@ export default function Header() {
           onClick={() => console.log("Fechar menu")}
           end
         >
-          <img src="https://picsum.photos/120/90" alt="" id="imgLogo" />
+          <img src={logo} alt="" id="imgLogo" />
         </Link>
         <Link 
           to="/" 
