@@ -67,7 +67,7 @@ export function Login() {
 
   return (
     <main className="telaLogin">
-      <div className="containerForm">
+      <div className="containerForm effect">
         <div className={`containerFormChange ${changeForm ? "isActive" : ""}`}>
           <form className="form front">
             <h1 className="titleLogin">Moview</h1>
