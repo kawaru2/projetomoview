@@ -2,7 +2,7 @@ import {Link, NavLink} from 'react-router-dom'
 import {useMoviewContext} from "../hooks/useMoviewContext"
 import logo from '../assets/logo.svg'
 
-export default function Header() {
+export function Header() {
   const {isLogado, user} = useMoviewContext();
   
   return (
