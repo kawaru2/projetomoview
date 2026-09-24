@@ -4,20 +4,24 @@ export function Home() {
     title: "Mario Bros",
     year: 2010,
     average: 8.9,
+    isFavorite: false,
   },
   {
     title: "Batman - Begins",
     year: 2006,
     average: 8.5,
+    isFavorite: false,
   },
   {
     title: "A freira",
     year: 2018,
     average: 9.5,
+    isFavorite: false,
   }]
 
   const [ cardHover, setCardHover ] = useState(null);
   const [ modalFilme, setModalFilme ] = useState(null);
+  const [ checkFavorite, setCheckFavorite ] = useState({});
 
   return (
     <main>
@@ -42,12 +46,23 @@ export function Home() {
                   <div className="infoCardFilme">
                     <p className="filmeTitle">Titulo: {filme.title}</p>
                     <p className="filmeYear">Ano: {filme.year}</p>
-                    <p className="voteAverage">⭐ {filme.average}</p>
-                    <p className="filmeFavorite">&#x2764;&#xFE0F; 9.0</p>
+                    <div className="classificacao">
+                      <p className="voteAverage">⭐ {filme.average}</p>
+                      <p className="filmeFavorite">{!checkFavorite[filme.title] ? "🤍" : "❤️"} 9.0</p>
+                    </div>
                     <p className="filmeCategoria">Categorias</p>
                 </div>
                   <div className={`overlayFilme ${cardHover === filme.title ? "active" : ""}`}>
-                    <button type="button" onClick={(e) => setModalFilme(filme)}>Ver mais</button>
+                    <button type="button" className="btnVerMais" onClick={() => setModalFilme(filme)}>Ver mais</button>
+                    <div className="secaoFavoritar">
+                      <label htmlFor="checkFavorite">Favoritar: </label>
+                      <button id="checkFavorite" type="button" className="btnFavorite" name="checkFavorite" onClick={() => setCheckFavorite(prev => ({
+                        ...prev,
+                        [filme.title]: !prev[filme.title]
+                      }))} >
+                        {!checkFavorite[filme.title] ? "🤍" : "❤️"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               )
@@ -60,9 +75,16 @@ export function Home() {
         <div className="modalOverlay" onClick={() => setModalFilme(null)}>
           <div className="modalContent" onClick={(e) => e.stopPropagation()}>
             {/* conteúdo do modal */}
-            <h2>{modalFilme.title}</h2>
-            <p>{modalFilme.year}</p>
-            <button type="button" onClick={() => setModalFilme(null)}>Fechar</button>
+            <img className="posterFilmeModal" src="https://picsum.photos/400/200" alt={modalFilme.title} />
+            <div className="filmeInfoModal">
+              <h2 className="filmeTitle">{modalFilme.title}</h2>
+              <p className="filmeAno">{modalFilme.year}</p>
+              <p className="popularidadeFilmeModal">Popularidade: {modalFilme.average}</p>
+            </div>
+            <button className="btnCloseModal" type="button" onClick={() => setModalFilme(null)}>
+              <span className="linha"></span>
+              <span className="linha"></span>
+            </button>
           </div>
         </div>
       )}
