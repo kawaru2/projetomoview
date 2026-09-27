@@ -476,11 +476,15 @@
 }
 
 .modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
   background-color: #fff;
   width: min(500px, 90vw);
   border-radius: 16px;
-  padding: 24px;
+  padding: 45px 28px;
   position: relative;
+  word-break: break-word;
 }
 
 .btnCloseModal {
@@ -507,6 +511,68 @@
 .linha:nth-child(2) {
   position: absolute;
   transform: rotate(-45deg);
+}
+
+.filmeInfoModal {
+  position: relative;
+}
+
+.posterFilmeModal {
+  border-radius: 20px;
+  background-size: cover;
+}
+
+#filmeTitleModal {
+  font-size: 1.35rem;
+  word-break: break-word;
+  max-width: calc(100% - 60px);
+}
+
+.filmeAno {
+  font-weight: 400;
+}
+
+.btnFavoriteModal {
+  position: absolute;
+  top: 3px;
+  right: 10px;
+}
+
+.indicacaoIdade {
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  right: 60px;
+}
+
+.bioFilmeModal {
+  display: flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.btnVerMaisFilmes {
+  display: flex;
+  padding: 5px 20px;
+  margin-top: 10px;
+  justify-self: center;
+  border-radius: 8px;
+  outline: none;
+  border: 2px solid transparent;
+  transform: scale(.95);
+  transition: transform .2s ease-in-out, color .2s ease-in-out;
+  cursor: pointer;
+}
+
+.btnVerMaisFilmes:hover {
+  animation: buttonAnimation .4s ease-in-out forwards;
+  transform: scale(1);
+  color: var(--border-effect);
+}
+
+.redEffect {
+  color: var(--cor-primaria);
 }
 
 /* ================================================================ */

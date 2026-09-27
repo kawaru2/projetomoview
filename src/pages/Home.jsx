@@ -5,18 +5,21 @@ export function Home() {
     year: 2010,
     average: 8.9,
     isFavorite: false,
+    bio: "descrição do filme (sinopse)",
   },
   {
     title: "Batman - Begins",
     year: 2006,
     average: 8.5,
     isFavorite: false,
+    bio: "descrição do filme (sinopse)",
   },
   {
     title: "A freira",
     year: 2018,
     average: 9.5,
     isFavorite: false,
+    bio: "descrição do filme (sinopse)",
   }]
 
   const [ cardHover, setCardHover ] = useState(null);
@@ -55,7 +58,7 @@ export function Home() {
                   <div className={`overlayFilme ${cardHover === filme.title ? "active" : ""}`}>
                     <button type="button" className="btnVerMais" onClick={() => setModalFilme(filme)}>Ver mais</button>
                     <div className="secaoFavoritar">
-                      <label htmlFor="checkFavorite">Favoritar: </label>
+                      <label htmlFor="checkFavorite">{!checkFavorite[filme.title] ? "Favoritar: " : "Favorito: "}</label>
                       <button id="checkFavorite" type="button" className="btnFavorite" name="checkFavorite" onClick={() => setCheckFavorite(prev => ({
                         ...prev,
                         [filme.title]: !prev[filme.title]
@@ -77,9 +80,23 @@ export function Home() {
             {/* conteúdo do modal */}
             <img className="posterFilmeModal" src="https://picsum.photos/400/200" alt={modalFilme.title} />
             <div className="filmeInfoModal">
-              <h2 className="filmeTitle">{modalFilme.title}</h2>
-              <p className="filmeAno">{modalFilme.year}</p>
-              <p className="popularidadeFilmeModal">Popularidade: {modalFilme.average}</p>
+              <div className="infoInicioModal">
+                <h2 className="filmeTitle" id="filmeTitleModal"><span className="redEffect">Titulo: </span>{modalFilme.title}</h2>
+                <p className="filmeAno"><span className="redEffect">Ano: </span>{modalFilme.year}</p>
+              </div>
+              <div className="secaoFavoritar" id="secaoFavoritarModal">
+                <p className="popularidadeFilmeModal">⭐ <span className="redEffect">Popularidade: </span>{modalFilme.average}</p>
+                <button className="btnFavorite btnFavoriteModal" onClick={() => setCheckFavorite(prev => ({
+                  ...prev,
+                  [modalFilme.title]: !prev[modalFilme.title]
+                  }))} >
+                  {!checkFavorite[modalFilme.title] ? "🤍" : "❤️"}
+                  </button>
+                  <img src="https://picsum.photos/35/35" alt="" className="indicacaoIdade" />
+              </div>
+              <p className="categoriaFilmeModal">Categorias</p>
+              <p className="bioFilmeModal redEffect">{modalFilme.bio}</p>
+              <button className="btnVerMaisFilmes">Mais Filmes</button>
             </div>
             <button className="btnCloseModal" type="button" onClick={() => setModalFilme(null)}>
               <span className="linha"></span>
