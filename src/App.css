@@ -498,7 +498,7 @@
 
 .linha {
   display: block;
-  width: 20px;
+  width: 25px;
   height: 3px;
   border-radius: 20px;
   background-color: red;
@@ -514,18 +514,24 @@
 }
 
 .filmeInfoModal {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   position: relative;
 }
 
 .posterFilmeModal {
+  height: 300px;
+  width: 100%;
   border-radius: 20px;
   background-size: cover;
+  background-position: center;
 }
 
 #filmeTitleModal {
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   word-break: break-word;
-  max-width: calc(100% - 60px);
+  max-width: calc(100% - 80px);
 }
 
 .filmeAno {
@@ -550,6 +556,9 @@
   max-width: 100%;
   flex-wrap: wrap;
   margin-bottom: 20px;
+  font-size: .8rem;
+  line-height: 20px;
+  
 }
 
 .btnVerMaisFilmes {

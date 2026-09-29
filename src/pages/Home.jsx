@@ -1,26 +1,13 @@
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { MoviewContext } from '../context/context'
+
 export function Home() {
-  const simulador = [{
-    title: "Mario Bros",
-    year: 2010,
-    average: 8.9,
-    isFavorite: false,
-    bio: "descrição do filme (sinopse)",
-  },
-  {
-    title: "Batman - Begins",
-    year: 2006,
-    average: 8.5,
-    isFavorite: false,
-    bio: "descrição do filme (sinopse)",
-  },
-  {
-    title: "A freira",
-    year: 2018,
-    average: 9.5,
-    isFavorite: false,
-    bio: "descrição do filme (sinopse)",
-  }]
+  const { dados } = useContext(MoviewContext);
+
+  const filmes = dados ?.results?.slice(0, 3) ?? [];
+
+  const navigate = useNavigate();
 
   const [ cardHover, setCardHover ] = useState(null);
   const [ modalFilme, setModalFilme ] = useState(null);
@@ -37,23 +24,22 @@ export function Home() {
         <div id="maisPopularesHome">
           <h2 id="tituloMaisPopulares">Os 3 filmes mais populares no momento:</h2>
           <div id="filmes">
-            {simulador.map((filme, key) => {
+            { filmes.map(filme => {
               return (
                 <div 
-                key={key} 
+                key={filme ?.id} 
                 className="cardFilme" 
-                onMouseEnter={() => setCardHover(filme.title)} 
+                onMouseEnter={() => setCardHover(filme.title)}
                 onMouseLeave={() => setCardHover(null)}
                 >
-                  <img className="posterPath" src="https://picsum.photos/300/200" alt={filme.title} />
+                  <img className="posterPath" src={`http://image.tmdb.org/t/p/w200${filme.poster_path}`} alt={filme.title} />
                   <div className="infoCardFilme">
                     <p className="filmeTitle">Titulo: {filme.title}</p>
-                    <p className="filmeYear">Ano: {filme.year}</p>
+                    <p className="filmeYear">Ano: {filme.release_date.slice(0, 4) ?? "Não informado"}</p>
                     <div className="classificacao">
-                      <p className="voteAverage">⭐ {filme.average}</p>
-                      <p className="filmeFavorite">{!checkFavorite[filme.title] ? "🤍" : "❤️"} 9.0</p>
+                      <p className="voteAverage">⭐ {filme ?. vote_average.toFixed(1)}</p>
+                      <p className="filmeFavorite">{!checkFavorite[filme.title] ? "🤍" : "❤️"} {filme ?. vote_count}</p>
                     </div>
-                    <p className="filmeCategoria">Categorias</p>
                 </div>
                   <div className={`overlayFilme ${cardHover === filme.title ? "active" : ""}`}>
                     <button type="button" className="btnVerMais" onClick={() => setModalFilme(filme)}>Ver mais</button>
@@ -78,14 +64,14 @@ export function Home() {
         <div className="modalOverlay" onClick={() => setModalFilme(null)}>
           <div className="modalContent" onClick={(e) => e.stopPropagation()}>
             {/* conteúdo do modal */}
-            <img className="posterFilmeModal" src="https://picsum.photos/400/200" alt={modalFilme.title} />
+            <img className="posterFilmeModal" src={`https://image.tmdb.org/t/p/w500${modalFilme ?. poster_path}`} alt={modalFilme.title} />
             <div className="filmeInfoModal">
               <div className="infoInicioModal">
                 <h2 className="filmeTitle" id="filmeTitleModal"><span className="redEffect">Titulo: </span>{modalFilme.title}</h2>
-                <p className="filmeAno"><span className="redEffect">Ano: </span>{modalFilme.year}</p>
+                <p className="filmeAno"><span className="redEffect">Ano: </span>{modalFilme ?. release_date.slice(0, 4) ?? "Não informado"}</p>
               </div>
               <div className="secaoFavoritar" id="secaoFavoritarModal">
-                <p className="popularidadeFilmeModal">⭐ <span className="redEffect">Popularidade: </span>{modalFilme.average}</p>
+                <p className="popularidadeFilmeModal">Popularidade ⭐: {modalFilme ?. vote_average.toFixed(1)}</p>
                 <button className="btnFavorite btnFavoriteModal" onClick={() => setCheckFavorite(prev => ({
                   ...prev,
                   [modalFilme.title]: !prev[modalFilme.title]
@@ -94,9 +80,9 @@ export function Home() {
                   </button>
                   <img src="https://picsum.photos/35/35" alt="" className="indicacaoIdade" />
               </div>
-              <p className="categoriaFilmeModal">Categorias</p>
-              <p className="bioFilmeModal redEffect">{modalFilme.bio}</p>
-              <button className="btnVerMaisFilmes">Mais Filmes</button>
+              <p className="categoriaFilmeModal">{}</p>
+              <p className="bioFilmeModal">{modalFilme ?. overview}</p>
+              <button className="btnVerMaisFilmes" onClick={() => navigate("/filmes")}>Mais Filmes</button>
             </div>
             <button className="btnCloseModal" type="button" onClick={() => setModalFilme(null)}>
               <span className="linha"></span>
