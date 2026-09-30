@@ -392,7 +392,7 @@
 
 .cardFilme {
   width: 240px;
-  height: 300px;
+  padding-bottom: 5px;
   position: relative;
   border-radius: 20px;
   border: 2px solid red;
@@ -448,7 +448,10 @@
 }
 
 .infoCardFilme {
-  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 5px;
 }
 
 .posterPath {
@@ -461,6 +464,12 @@
   display: flex;
   width: 100%;
   justify-content: space-around;
+}
+
+.categorias {
+  font-size: .8rem;
+  margin-top: 7px;
+  text-align: center;
 }
 
 /* ================================= MODAIS ================================= */

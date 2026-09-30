@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { MoviewContext } from '../context/context'
 
 export function Home() {
-  const { dados } = useContext(MoviewContext);
+  const { dados, generosFilmes } = useContext(MoviewContext);
 
   const filmes = dados ?.results?.slice(0, 3) ?? [];
 
@@ -34,12 +34,18 @@ export function Home() {
                 >
                   <img className="posterPath" src={`http://image.tmdb.org/t/p/w200${filme.poster_path}`} alt={filme.title} />
                   <div className="infoCardFilme">
-                    <p className="filmeTitle">Titulo: {filme.title}</p>
-                    <p className="filmeYear">Ano: {filme.release_date.slice(0, 4) ?? "Não informado"}</p>
+                    <p className="filmeTitle">Titulo: <span className="redEffect">{filme.title}</span></p>
+                    <p className="filmeYear">Ano: <span className="redEffect">{filme.release_date.slice(0, 4) ?? "Não informado"}</span></p>
                     <div className="classificacao">
                       <p className="voteAverage">⭐ {filme ?. vote_average.toFixed(1)}</p>
                       <p className="filmeFavorite">{!checkFavorite[filme.title] ? "🤍" : "❤️"} {filme ?. vote_count}</p>
                     </div>
+                    <p className="categorias redEffect">{
+                      (filme.genre_ids ?? [])
+                      .map(id => generosFilmes.find(genero => genero.id === id)?. name)
+                      .filter(Boolean)
+                      .join(", ")}
+                    </p>
                 </div>
                   <div className={`overlayFilme ${cardHover === filme.title ? "active" : ""}`}>
                     <button type="button" className="btnVerMais" onClick={() => setModalFilme(filme)}>Ver mais</button>

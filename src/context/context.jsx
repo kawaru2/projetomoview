@@ -17,6 +17,7 @@ export function MoviewProvider({ children }) {
   });
 
   const [ dados, setDados ] = useState(null);
+  const [ generosFilmes, setGenerosFilmes ] = useState([]);
 
   const options = {
     method: "GET",
@@ -33,8 +34,15 @@ export function MoviewProvider({ children }) {
     .catch(console.error);
   }, [])
 
+  useEffect(() => {
+    fetch("https://api.themoviedb.org/3/genre/movie/list?language=pt-BR", options)
+    .then(res => res.json())
+    .then(data => setGenerosFilmes(data.genres))
+    .catch(console.error);
+  }, [])
+
   return (
-    <MoviewContext.Provider value = {{isLogado, setIsLogado, dados}}>
+    <MoviewContext.Provider value = {{isLogado, setIsLogado, dados, generosFilmes}}>
       {children}
     </MoviewContext.Provider>
   );
