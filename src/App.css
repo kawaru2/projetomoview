@@ -472,6 +472,40 @@
   text-align: center;
 }
 
+/* =================================logo indicacao idade ================================= */
+
+.logoLivre, .logo10, .logo12, .logo14, .logo16, .logo18 {
+  padding: 7px;
+  color: #FFF;
+  text-shadow: 0 0 1px black;
+}
+
+.logoLivre {
+  background-color: #09e07c;
+}
+
+.logo10 {
+  background-color: rgb(53, 160, 196);
+}
+
+.logo12 {
+  background-color: #d48d0a;
+}
+
+.logo14 {
+  background-color: #da4f1c;
+}
+
+.logo16 {
+  background-color: #db1212;
+}
+
+.logo18 {
+  background-color: #0f0f0f;
+}
+
+/* ======================================================================================= */
+
 /* ================================= MODAIS ================================= */
 
 .modalOverlay {
@@ -572,9 +606,10 @@
 
 .btnVerMaisFilmes {
   display: flex;
+  width: fit-content;
   padding: 5px 20px;
   margin-top: 10px;
-  justify-self: center;
+  align-self: center;
   border-radius: 8px;
   outline: none;
   border: 2px solid transparent;

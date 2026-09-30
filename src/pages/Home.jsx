@@ -3,15 +3,25 @@ import { useNavigate } from 'react-router-dom'
 import { MoviewContext } from '../context/context'
 
 export function Home() {
-  const { dados, generosFilmes } = useContext(MoviewContext);
-
+  const { dados, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
   const filmes = dados ?.results?.slice(0, 3) ?? [];
-
   const navigate = useNavigate();
-
   const [ cardHover, setCardHover ] = useState(null);
   const [ modalFilme, setModalFilme ] = useState(null);
   const [ checkFavorite, setCheckFavorite ] = useState({});
+
+  function obterClassiIndicativa(valor) {
+    switch (String(valor)) {
+      case "L": return "logoLivre";
+      case "10": return "logo10";
+      case "12": return "logo12";
+      case "14": return "logo14";
+      case "16": return "logo16";
+      case "18": return "logo18";
+
+      default: return "";
+    }
+  }
 
   return (
     <main>
@@ -84,7 +94,9 @@ export function Home() {
                   }))} >
                   {!checkFavorite[modalFilme.title] ? "🤍" : "❤️"}
                   </button>
-                  <img src="https://picsum.photos/35/35" alt="" className="indicacaoIdade" />
+                  <p className={`indicacaoIdade ${obterClassiIndicativa(indicacaoIdade[modalFilme.id])}`}>
+                    {indicacaoIdade[modalFilme.id]}
+                  </p>
               </div>
               <p className="categoriaFilmeModal">{}</p>
               <p className="bioFilmeModal">{modalFilme ?. overview}</p>
