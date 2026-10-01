@@ -2,6 +2,7 @@ import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MoviewContext } from '../context/context'
 import { obterClassiIndicativa } from '../utils/obterClassiIndicativa';
+import { obterGeneros } from "../utils/obterGeneros"
 
 export function Home() {
   const { dados, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
@@ -39,10 +40,8 @@ export function Home() {
                       <p className="filmeFavorite">{!checkFavorite[filme.title] ? "🤍" : "❤️"} {filme ?. vote_count}</p>
                     </div>
                     <p className="categorias redEffect">{
-                      (filme.genre_ids ?? [])
-                      .map(id => generosFilmes.find(genero => genero.id === id)?. name)
-                      .filter(Boolean)
-                      .join(", ")}
+                      obterGeneros(filme.genre_ids, generosFilmes)
+                    }
                     </p>
                 </div>
                   <div className={`overlayFilme ${cardHover === filme.title ? "active" : ""}`}>

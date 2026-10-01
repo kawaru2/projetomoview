@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { MoviewContext } from "../context/context"
 import { ModalBio } from "../components/modalBio"
+import { obterGeneros } from "../utils/obterGeneros"
 import "./Filmes.css"
 export function Filmes() {
   const { dados, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
@@ -32,8 +33,11 @@ export function Filmes() {
               }))}
               >
                 {`${!favoritar[filme.title] ? "🤍" : "❤️"} ${filme ?. vote_count}`}
-                </button>
+              </button>
             </div>
+              <p className="categoriasDoFilme">
+                Categorias:<br/><span>{obterGeneros(filme.genre_ids, generosFilmes)}</span>
+              </p>
             <button className="btnBioFilme" onClick={() => setModalBio(filme)}>Ler biografia</button>
           </div>
         </li>

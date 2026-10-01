@@ -95,6 +95,16 @@
   
 }
 
+.categoriasDoFilme {
+  font-size: 1rem;
+  margin-left: 5px;
+}
+
+.categoriasDoFilme > span {
+  font-size: .8rem;
+  color: var(--cor-primaria);
+}
+
 .btnBioFilme:hover {
   animation: buttonAnimation .5s ease-in-out forwards;
   transform: scale(1);
