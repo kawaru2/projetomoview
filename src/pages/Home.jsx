@@ -1,6 +1,7 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MoviewContext } from '../context/context'
+import { obterClassiIndicativa } from '../utils/obterClassiIndicativa';
 
 export function Home() {
   const { dados, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
@@ -9,19 +10,6 @@ export function Home() {
   const [ cardHover, setCardHover ] = useState(null);
   const [ modalFilme, setModalFilme ] = useState(null);
   const [ checkFavorite, setCheckFavorite ] = useState({});
-
-  function obterClassiIndicativa(valor) {
-    switch (String(valor)) {
-      case "L": return "logoLivre";
-      case "10": return "logo10";
-      case "12": return "logo12";
-      case "14": return "logo14";
-      case "16": return "logo16";
-      case "18": return "logo18";
-
-      default: return "";
-    }
-  }
 
   return (
     <main>
@@ -45,7 +33,7 @@ export function Home() {
                   <img className="posterPath" src={`http://image.tmdb.org/t/p/w200${filme.poster_path}`} alt={filme.title} />
                   <div className="infoCardFilme">
                     <p className="filmeTitle">Titulo: <span className="redEffect">{filme.title}</span></p>
-                    <p className="filmeYear">Ano: <span className="redEffect">{filme.release_date.slice(0, 4) ?? "Não informado"}</span></p>
+                    <p className="filmeYear">Ano: <span className="redEffect">{filme.release_date.slice(0, 4) ?? "Sem informações"}</span></p>
                     <div className="classificacao">
                       <p className="voteAverage">⭐ {filme ?. vote_average.toFixed(1)}</p>
                       <p className="filmeFavorite">{!checkFavorite[filme.title] ? "🤍" : "❤️"} {filme ?. vote_count}</p>
