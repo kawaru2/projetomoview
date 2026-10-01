@@ -1,0 +1,101 @@
+.conteudoPaginaFilmes {
+  display: flex;
+  width: 90vw;
+  max-width: 1400px;
+  flex-direction: column;
+  align-self: center;
+  justify-self: center;
+  margin-top: 50px;
+  padding: 30px 20px;
+  background-color: #FFF;
+  border-radius: 20px 20px 0 0;
+}
+
+.tituloCatalogo, .tituloCarrossel, .subTituloCatalogo {
+  text-align: center;
+  margin: 25px 0;
+}
+
+.tituloCatalogo {
+  font-size: 2.4rem;
+}
+
+.tituloCarrossel, .subTituloCatalogo {
+  font-size: 2rem;
+}
+
+.listaDeFilmes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px 50px;
+  margin-top: 30px;
+}
+
+.filmeDaLista {
+  display: flex;
+  width: 300px;
+  border: 1px solid black;
+  border-radius: 15px 0 0 15px;
+}
+
+.dadosFilme {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.posterPathDeFilmes {
+  width: 45%;
+  border-radius: 15px 0 0 15px;
+}
+
+.tituloEAnoFilme {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tituloDoFilme {
+  font-size: .9rem;
+  padding: 0 5px;
+}
+
+.anoDoFilme {
+  font-size: .8rem;
+  padding: 0 5px;
+}
+
+.secaoClassificacaoDeFilmes {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  cursor: default;
+}
+
+.btnFavoritarFilme {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.btnBioFilme {
+  display: flex;
+  width: fit-content;
+  align-self: center;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  transform: scale(.96);
+  border: 2px solid transparent;
+  transition: transform .3s ease-in-out;
+  
+}
+
+.btnBioFilme:hover {
+  animation: buttonAnimation .5s ease-in-out forwards;
+  transform: scale(1);
+}
