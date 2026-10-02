@@ -75,6 +75,10 @@
   cursor: default;
 }
 
+.infoInicioModal {
+  position: relative;
+}
+
 .btnFavoritarFilme {
   background-color: transparent;
   border: none;

@@ -5,8 +5,8 @@ import { obterClassiIndicativa } from '../utils/obterClassiIndicativa';
 import { obterGeneros } from "../utils/obterGeneros"
 
 export function Home() {
-  const { dados, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
-  const filmes = dados ?.results?.slice(0, 3) ?? [];
+  const { filmesTopRated, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
+  const filmes = filmesTopRated ?.results?.slice(0, 3) ?? [];
   const navigate = useNavigate();
   const [ cardHover, setCardHover ] = useState(null);
   const [ modalFilme, setModalFilme ] = useState(null);

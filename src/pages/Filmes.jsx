@@ -4,7 +4,7 @@ import { ModalBio } from "../components/modalBio"
 import { obterGeneros } from "../utils/obterGeneros"
 import "./Filmes.css"
 export function Filmes() {
-  const { dados, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
+  const { filmesTopRated, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
   const [ favoritar, setFavoritar ] = useState({});
   const [ modalBio, setModalBio ] = useState(null);
   return (
@@ -14,7 +14,7 @@ export function Filmes() {
     {/* CARROUSSEL */}
     <h2 className="subTituloCatalogo">Todos os filmes</h2>
     <ul className="listaDeFilmes">
-      {dados ?. results.map(filme => (
+      {filmesTopRated ?. results.map(filme => (
         <li key={filme ?. id} className="filmeDaLista">
           <img src={`http://image.tmdb.org/t/p/w500${filme.poster_path}`} alt={filme.title} className="posterPathDeFilmes" />
           <div className="dadosFilme">

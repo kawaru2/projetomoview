@@ -1,4 +1,8 @@
+import { obterClassiIndicativa } from "../utils/obterClassiIndicativa"
+import { MoviewContext } from "../context/context"
+import { useContext } from "react"
 export function ModalBio({ filme, setModal }) {
+  const { indicacaoIdade } = useContext(MoviewContext);
   return (
     <div className="modalOverlay" onClick={setModal}>
       <div className="modalContent" onClick={(e) => e.stopPropagation()}>
@@ -10,6 +14,11 @@ export function ModalBio({ filme, setModal }) {
           <p className="filmeAno">
             {filme.release_date.slice(0, 4)}
           </p>
+          <p className={`indicacaoIdade ${obterClassiIndicativa(indicacaoIdade[filme.id])}`}>
+            {indicacaoIdade[filme.id]}
+          </p>
+        </div>
+        <div className="secaoFavoritar">
         </div>
         <p className="bioFilmeModal">
           {filme.overview}

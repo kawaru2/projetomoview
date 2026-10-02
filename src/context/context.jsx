@@ -16,7 +16,7 @@ export function MoviewProvider({ children }) {
     return valor === "true";
   });
 
-  const [ dados, setDados ] = useState(null);
+  const [ filmesTopRated, setFilmesTopRated ] = useState(null);
   const [ generosFilmes, setGenerosFilmes ] = useState([]);
   const [ indicacaoIdade, setIndicacaoIdade ] = useState(null);
 
@@ -29,24 +29,24 @@ export function MoviewProvider({ children }) {
   }
 
   useEffect(() => {
-    if (!dados ?. results) return;
+    if (!filmesTopRated ?. results) return;
     Promise.all(
-      dados.results.slice(0, 3).map(async filme => {
+      filmesTopRated.results.slice(0, 3).map(async filme => {
         const resposta = await fetch(`https://api.themoviedb.org/3/movie/${filme.id}/release_dates`, options);
         const resultado = await resposta.json();
         const brasil = resultado.results ?. find(item => item.iso_3166_1 === "BR");
-        const classificacao = brasil ?. release_dates ?. find(item => item.certification) ?. certification ?? "Não informado";
+        const classificacao = brasil ?. release_dates ?. find(item => item.certification) ?. certification ?? "";
         return [filme.id, classificacao];
       })
     )
     .then(resultados => setIndicacaoIdade(Object.fromEntries(resultados)))
     .catch(console.error)
-  }, [dados])
+  }, [filmesTopRated])
 
   useEffect(() => {
-    fetch("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-br&page=1&sort_by=popularity.desc", options)
+    fetch("https://api.themoviedb.org/3/movie/top_rated?language=pt-BR&page=1", options)
     .then(res => res.json())
-    .then(res => setDados(res))
+    .then(res => setFilmesTopRated(res))
     .catch(console.error);
   }, [])
 
@@ -58,7 +58,7 @@ export function MoviewProvider({ children }) {
   }, [])
 
   return (
-    <MoviewContext.Provider value = {{isLogado, setIsLogado, dados, generosFilmes, indicacaoIdade}}>
+    <MoviewContext.Provider value = {{isLogado, setIsLogado, filmesTopRated, generosFilmes, indicacaoIdade}}>
       {children}
     </MoviewContext.Provider>
   );
