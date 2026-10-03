@@ -89,10 +89,10 @@ export function Home() {
               <p className="bioFilmeModal">{modalFilme ?. overview}</p>
               <button className="btnVerMaisFilmes" onClick={() => navigate("/filmes")}>Mais Filmes</button>
             </div>
-            <button className="btnCloseModal" type="button" onClick={() => setModalFilme(null)}>
+            <div className="btnCloseModal" type="button" onClick={() => setModalFilme(null)}>
               <span className="linha"></span>
               <span className="linha"></span>
-            </button>
+            </div>
           </div>
         </div>
       )}

@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 src/service/apiKey.js
 diarioDev.txt
+/src/components/carrossel-explicacao.txt

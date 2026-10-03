@@ -2,9 +2,10 @@ import { useContext, useState } from "react"
 import { MoviewContext } from "../context/context"
 import { ModalBio } from "../components/modalBio"
 import { obterGeneros } from "../utils/obterGeneros"
+import { Carrossel } from "../components/carrossel"
 import "./Filmes.css"
 export function Filmes() {
-  const { filmesTopRated, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
+  const { filmesTopRated, generosFilmes } = useContext(MoviewContext);
   const [ favoritar, setFavoritar ] = useState({});
   const [ modalBio, setModalBio ] = useState(null);
   return (
@@ -12,6 +13,7 @@ export function Filmes() {
     <h1 className="tituloCatalogo">Seja bem-vindo ao catálogo do Moview</h1>
     <h2 className="tituloCarrossel">Filmes populares</h2>
     {/* CARROUSSEL */}
+    <Carrossel listaFilmes={filmesTopRated ?. results} />
     <h2 className="subTituloCatalogo">Todos os filmes</h2>
     <ul className="listaDeFilmes">
       {filmesTopRated ?. results.map(filme => (
@@ -19,8 +21,8 @@ export function Filmes() {
           <img src={`http://image.tmdb.org/t/p/w500${filme.poster_path}`} alt={filme.title} className="posterPathDeFilmes" />
           <div className="dadosFilme">
             <div className="tituloEAnoFilme">
-              <h3 className="tituloDoFilme">{filme.title}</h3>
-              <p className="anoDoFilme">{filme.release_date.slice(0, 4) ?? "Sem informações"}</p>
+              <h3 className="tituloDoFilme redEffect">{filme.title}</h3>
+              <p className="anoDoFilme redEffect">{filme.release_date.slice(0, 4) ?? "Sem informações"}</p>
             </div>
             <div className="secaoClassificacaoDeFilmes">
               <p className="voteAverageDeFilmes">

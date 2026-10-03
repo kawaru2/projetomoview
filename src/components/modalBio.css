@@ -1,0 +1,79 @@
+.sobreposicaoModal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, .7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.conteudoDoModal {
+  display: flex;
+  width: min(900px, 90vw);
+  border-radius: 20px 0 0 20px;
+  background-color: #fff;
+  overflow-wrap: anywhere;
+  position: relative;
+}
+
+.btnFecharModal {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  padding: 15px 0;
+  cursor: pointer;
+}
+
+.linhaModal {
+  display: flex;
+  width: 25px;
+  height: 3px;
+  background-color: var(--cor-primaria);
+}
+
+.linhaModal:nth-child(1) {
+  transform: rotate(45deg);
+  position: absolute;
+}
+
+.linhaModal:nth-child(2) {
+  transform: rotate(-45deg);
+  /* position: absolute; */
+}
+
+.imageFilme {
+  border-radius: 20px 0 0 20px;
+  width: 45%;
+}
+
+.informacoesFilme {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 10px 20px;
+}
+
+.nomeEAnoDoFilme {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.nomeDoFilme {
+  font-size: 1.5rem;
+}
+
+.lancamentoDoFilme {
+  font-size: 1.3rem;
+}
+
+.classificacaoIndicativa {
+  position: absolute;
+  top: 130px;
+  right: 60px;
+}
+
+.sinopse {
+  font-size: 1.05rem;
+}
