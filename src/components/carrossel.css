@@ -1,3 +1,6 @@
+:root {
+  --indicador-ativo: #e90f0f;
+}
 .carrossel {
   position: relative;
 }
@@ -31,11 +34,32 @@
 }
 
 .botaoCarrossel {
+  display: flex;
+  align-self: center;
   position: absolute;
   top: 50%;
   z-index: 1;
-  transform: translateY(-50%);
+  transform: translateY(-50%), scale(.9);
+  border: 1px solid transparent;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 2.6rem;
+  padding: 5px 10px;
+  border-radius: 20px;
   cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  transition: background .2s ease-in-out,
+  box-shadow .2s ease-in-out,
+  transform .1s ease-in-out,
+  opacity .1s ease-in-out,
+  visibility linear .25s;
+}
+
+.botaoCarrossel:hover {
+  background-color: #e2e0e0;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+  transform: scale(1);
 }
 
 .botaoAnterior {
@@ -44,4 +68,27 @@
 
 .botaoProximo {
   right: 8px;
+}
+
+.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.indicadoresCarrossel {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.indicadorCarrossel {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #777;
+}
+
+.indicadorCarrossel.indicador {
+  background-color: var(--indicador-ativo);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 }
