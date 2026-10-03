@@ -1,30 +1,51 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import "./carrossel.css"
+
 export function Carrossel({listaFilmes = []}) {
   const trilhoRef = useRef(null);
   const totalFilmes = listaFilmes.slice(0, 6)
   const [ visible, setVisible ] = useState(false);
   const [ filmeAtual, setFilmeAtual ] = useState(0);
+  const quantidadeFilmes = totalFilmes.length;
+
   function moverCarrossel(direcao) {
 
-    const trilho = trilhoRef.current;
-    const quantidadeFilmes = totalFilmes.length;
-    let proximoFilme
+    if(quantidadeFilmes === 0) return;
 
-    if(!trilho || quantidadeFilmes === 0) return;
+    setFilmeAtual(atual => {
 
-    if (direcao === 1) {
-      proximoFilme = filmeAtual === quantidadeFilmes - 1 ? 0 : filmeAtual + 1;
-    } else {
-      proximoFilme = filmeAtual === 0 ? quantidadeFilmes - 1 : filmeAtual - 1;
-    }
+      if (direcao ===  1) {
+        return atual === quantidadeFilmes - 1 ? 0 : atual + 1;
+      }
 
-    setFilmeAtual(proximoFilme);
-    trilho.scrollTo({
-      left: proximoFilme * trilho.clientWidth,
-      behavior: "smooth",
-    })
+      return atual === 0 ? quantidadeFilmes - 1 : atual - 1;
+
+    });
   }
+
+  useEffect(() => {
+
+    if (quantidadeFilmes < 2) return;
+
+    const intervalo = setInterval(() => {
+      setFilmeAtual(atual => atual === quantidadeFilmes - 1 ? 0 : atual + 1);
+    }, 4000)
+
+    return () => clearInterval(intervalo);
+
+  }, [quantidadeFilmes])
+
+  useEffect(() => {
+
+    const trilho = trilhoRef.current;
+
+    if (!trilho || quantidadeFilmes === 0) return;
+
+    trilho.scrollTo({
+      left: filmeAtual * trilho.clientWidth,
+      behavior: "smooth",
+    });
+  }, [filmeAtual, quantidadeFilmes])
 
   return (
     <>
