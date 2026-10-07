@@ -95,17 +95,33 @@ cd projetomoview
 npm install
 ```
 
-4. Inicie o servidor de desenvolvimento:
+4. Crie um arquivo `.env.local` na raiz do projeto e adicione seu token de leitura da TMDB:
+
+```env
+TMDB_READ_ACCESS_TOKEN=seu_token_de_leitura_da_tmdb
+```
+
+O token é usado apenas pelo endpoint de servidor. Não use o prefixo `VITE_`, pois variáveis com esse prefixo podem ser incluídas no código enviado ao navegador.
+
+5. Inicie o servidor de desenvolvimento:
 
 ```bash
 npm run dev
 ```
 
-5. Abra no navegador a URL exibida no terminal, normalmente:
+6. Abra no navegador a URL exibida no terminal, normalmente:
 
 ```bash
 http://localhost:5173
 ```
+
+## ☁️ Deploy na Vercel
+
+1. Importe o repositório na Vercel.
+2. Em **Settings → Environment Variables**, configure `TMDB_READ_ACCESS_TOKEN` com seu token de leitura da TMDB para os ambientes desejados.
+3. Faça um novo deploy após salvar a variável.
+
+As consultas passam pela função `api/tmdb.js`, que mantém o token no servidor e permite somente os endpoints da TMDB usados pelo site.
 
 ---
 
