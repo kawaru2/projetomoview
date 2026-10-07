@@ -1,20 +1,30 @@
 import { useContext, useState } from "react"
-import { MoviewContext } from "../context/context"
+import { MoviewContext } from "../context/criandoContexto"
 import { ModalBio } from "../components/modalBio"
 import { obterGeneros } from "../utils/obterGeneros"
 import { Carrossel } from "../components/carrossel"
 import "./Filmes.css"
 export function Filmes() {
-  const { filmesTopRated, generosFilmes } = useContext(MoviewContext);
+  const { filmesTopRated, generosFilmes, trendingFilmesWeek } = useContext(MoviewContext);
   const [ favoritar, setFavoritar ] = useState({});
   const [ modalBio, setModalBio ] = useState(null);
+
+  // Teste do Node (back-end).
+
+  // async function testeCarregarFilmes() {
+  //   const resposta = await fetch("http://localhost:3000/filmes");
+  //   if (!resposta.ok) throw new Error(`Erro na API: ${resposta.status}`);
+  //   const dados = await resposta.json();
+  //   console.log(dados.results);
+  // }
+  // testeCarregarFilmes().catch(console.error);
   return (
   <main className="conteudoPaginaFilmes">
     <h1 className="tituloCatalogo">Seja bem-vindo ao catálogo do Moview</h1>
-    <h2 className="tituloCarrossel">Filmes populares</h2>
+    <h2 className="tituloCarrossel">Tendências da semana</h2>
     {/* CARROUSSEL */}
-    <Carrossel listaFilmes={filmesTopRated ?. results} />
-    <h2 className="subTituloCatalogo">Todos os filmes</h2>
+    <Carrossel listaFilmes={trendingFilmesWeek ?. results} />
+    <h2 className="subTituloCatalogo">Filmes mais bem avaliados</h2>
     <ul className="listaDeFilmes">
       {filmesTopRated ?. results.map(filme => (
         <li key={filme ?. id} className="filmeDaLista">

@@ -1,5 +1,5 @@
-import {useContext} from 'react'
-import {MoviewContext} from '../context/context'
+import { useContext } from 'react'
+import { MoviewContext } from '../context/criandoContexto'
 
 export function useMoviewContext() {
   const context = useContext(MoviewContext);

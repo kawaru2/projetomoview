@@ -3,7 +3,7 @@ import { Header } from './components/Header'
 import './App.css'
 import { Home } from './pages/Home'
 import { Filmes } from './pages/Filmes'
-// import Sobre from './pages/Sobre'
+import { Sobre } from './pages/Sobre'
 import { Login } from './pages/Login'
 import { RecuperarSenha } from './pages/recuperarSenha'
 
@@ -17,7 +17,7 @@ function App() {
 
         <Route path="/Filmes" element={<Filmes />} />
 
-        {/* <Route path="/Sobre" element={<Sobre />} /> */}
+        <Route path="/Sobre" element={<Sobre />} />
 
         <Route path="/Login" element={<Login />} />
 

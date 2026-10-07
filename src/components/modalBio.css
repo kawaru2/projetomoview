@@ -6,6 +6,11 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: aparecerFundoModal .25s ease-out both;
+}
+
+.modalOverlay {
+  animation: aparecerFundoModal .25s ease-out both;
 }
 
 .conteudoDoModal {
@@ -15,6 +20,35 @@
   background-color: #fff;
   overflow-wrap: anywhere;
   position: relative;
+  transform-origin: center;
+  animation: entrarConteudoModal .45s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.modalContent {
+  transform-origin: center;
+  animation: entrarConteudoModal .45s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+@keyframes aparecerFundoModal {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes entrarConteudoModal {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(.94) rotateX(5deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+  }
 }
 
 .btnFecharModal {
@@ -76,4 +110,13 @@
 
 .sinopse {
   font-size: 1.05rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sobreposicaoModal,
+  .modalOverlay,
+  .conteudoDoModal,
+  .modalContent {
+    animation: none;
+  }
 }

@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react"
 import "./carrossel.css"
+// import { ModalBio } from "./modalBio";
 
 export function Carrossel({listaFilmes = []}) {
   const trilhoRef = useRef(null);
@@ -29,11 +30,11 @@ export function Carrossel({listaFilmes = []}) {
 
     const intervalo = setInterval(() => {
       setFilmeAtual(atual => atual === quantidadeFilmes - 1 ? 0 : atual + 1);
-    }, 4000)
+    }, 6000)
 
     return () => clearInterval(intervalo);
 
-  }, [quantidadeFilmes])
+  }, [filmeAtual, quantidadeFilmes])
 
   useEffect(() => {
 

@@ -1,0 +1,412 @@
+@media (max-width: 900px) {
+  .cabecalho {
+    width: 100%;
+    padding: 22px 20px;
+  }
+
+  .logoMarca {
+    gap: 24px;
+  }
+
+  .menu {
+    gap: 16px;
+    font-size: 1.05rem;
+  }
+
+  #conteudoHome {
+    width: 90vw;
+    margin-top: 64px;
+    gap: 72px;
+  }
+
+  #filmes {
+    gap: 32px;
+  }
+
+  .conteudoPaginaFilmes {
+    width: 94vw;
+    margin-top: 36px;
+  }
+
+  .listaDeFilmes {
+    gap: 20px;
+  }
+
+  .sobreDesenvolvedor {
+    grid-template-columns: 80px minmax(0, 1.2fr) minmax(210px, .8fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  .cabecalho {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 14px;
+    border-radius: 0 0 16px 16px;
+  }
+
+  .logoMarca {
+    gap: 14px;
+  }
+
+  #imgLogo {
+    width: 68px;
+    height: 54px;
+  }
+
+  #nomeEmpresa {
+    font-size: 2.6rem;
+  }
+
+  .menu {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 20px;
+    font-size: 1rem;
+  }
+
+  #conteudoHome {
+    width: 94vw;
+    margin-top: 36px;
+    padding: 32px 16px;
+    gap: 54px;
+  }
+
+  #apresentacao {
+    width: 100%;
+    gap: 18px;
+    text-align: center;
+  }
+
+  #bemVindoUser {
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+  }
+
+  #subTituloBemVindo {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  #maisPopularesHome {
+    width: 100%;
+    gap: 28px;
+  }
+
+  #tituloMaisPopulares {
+    padding: 0 8px;
+    font-size: 1.35rem;
+    text-align: center;
+  }
+
+  #filmes {
+    width: 100%;
+    gap: 20px;
+  }
+
+  .conteudoPaginaFilmes {
+    width: 94vw;
+    margin-top: 28px;
+    padding: 22px 14px;
+  }
+
+  .tituloCatalogo {
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+  }
+
+  .tituloCarrossel,
+  .subTituloCatalogo {
+    font-size: clamp(1.35rem, 5vw, 1.8rem);
+  }
+
+  .sobreDesenvolvedor {
+    grid-template-columns: 80px minmax(0, 1fr);
+  }
+
+  .sobreDesenvolvedorRedesSociais {
+    grid-column: 1 / -1;
+  }
+
+  .conteudoDoModal {
+    width: min(700px, calc(100vw - 28px));
+  }
+
+  .imageFilme {
+    width: 40%;
+    object-fit: cover;
+  }
+
+  .informacoesFilme {
+    min-width: 0;
+    padding: 12px 14px;
+  }
+
+  .nomeDoFilme {
+    font-size: 1.2rem;
+  }
+
+  .lancamentoDoFilme {
+    font-size: 1rem;
+  }
+
+  .sinopse {
+    font-size: .9rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .cabecalho {
+    padding: 14px 10px;
+    gap: 12px;
+  }
+
+  .menu {
+    gap: 8px 15px;
+    font-size: .92rem;
+  }
+
+  #conteudoHome {
+    width: 94vw;
+    margin-top: 24px;
+    padding: 26px 12px;
+    border-radius: 16px;
+  }
+
+  #maisPopularesHome {
+    gap: 22px;
+  }
+
+  #filmes {
+    gap: 18px;
+  }
+
+  .cardFilme {
+    width: min(100%, 300px);
+    height: auto;
+    min-height: 390px;
+  }
+
+  .posterPath {
+    height: 270px;
+    object-fit: cover;
+  }
+
+  .infoCardFilme {
+    padding: 8px 10px 12px;
+  }
+
+  .conteudoPaginaFilmes {
+    width: 96vw;
+    margin-top: 20px;
+    padding: 18px 10px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .tituloCatalogo,
+  .tituloCarrossel,
+  .subTituloCatalogo {
+    margin: 18px 0;
+  }
+
+  .listaDeFilmes {
+    gap: 16px;
+  }
+
+  .filmeDaLista {
+    width: min(100%, 360px);
+    min-width: 0;
+  }
+
+  .posterPathDeFilmes {
+    width: 38%;
+    object-fit: cover;
+  }
+
+  .dadosFilme {
+    min-width: 0;
+    padding: 8px 4px;
+    gap: 8px;
+  }
+
+  .categoriasDoFilme {
+    font-size: .88rem;
+  }
+
+  .itemCarrossel {
+    gap: 12px;
+  }
+
+  .itemCarrossel > img {
+    width: min(66vw, 250px);
+  }
+
+  .botaoCarrossel {
+    font-size: 2rem;
+  }
+
+  .sobreSecaoConteudo {
+    padding: 38px 6%;
+  }
+
+  .sobreProjetoBeneficios,
+  .sobreStackLista {
+    grid-template-columns: 1fr;
+  }
+
+  .sobreDesenvolvedor {
+    grid-template-columns: 1fr;
+  }
+
+  .sobreDesenvolvedorRedesSociais {
+    grid-column: auto;
+  }
+
+  .containerForm {
+    width: calc(100% - 28px);
+    margin: 28px auto 0;
+  }
+
+  .containerFormChange {
+    width: 100%;
+    height: 500px;
+  }
+
+  .containerFormChange .form {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    margin-top: 0;
+    padding: 48px 16px 22px;
+  }
+
+  .titleLogin {
+    font-size: 3.5rem;
+  }
+
+  .titleFormBack {
+    font-size: 1.7rem;
+  }
+
+  #btnRegister {
+    top: 14px;
+    right: 16px;
+  }
+
+  .camposLoginSenha {
+    width: 90%;
+  }
+
+  .entrarOuMudarSenha {
+    width: 78%;
+    gap: 20px;
+  }
+
+  .btnMin {
+    width: 70%;
+  }
+
+  .telaLogin {
+    height: auto;
+    min-height: calc(100vh - 120px);
+    padding-bottom: 30px;
+  }
+
+  .modalContent {
+    width: calc(100vw - 24px);
+    max-height: 92vh;
+    gap: 18px;
+    padding: 32px 18px 22px;
+    overflow-y: auto;
+  }
+
+  .posterFilmeModal {
+    width: min(75%, 280px);
+    height: min(34vh, 280px);
+    object-fit: cover;
+  }
+
+  #filmeTitleModal {
+    font-size: 1rem;
+  }
+
+  .bioFilmeModal {
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 380px) {
+  .menu {
+    column-gap: 12px;
+    font-size: .86rem;
+  }
+
+  #imgLogo {
+    width: 58px;
+    height: 48px;
+  }
+
+  #nomeEmpresa {
+    font-size: 2.3rem;
+  }
+
+  .containerForm {
+    width: calc(100% - 20px);
+  }
+
+  .containerFormChange {
+    height: 470px;
+  }
+
+  .containerFormChange .form {
+    padding-inline: 12px;
+  }
+
+  .campo {
+    font-size: 1rem;
+    padding-inline: 14px;
+  }
+
+  #placeholderLogin,
+  #placeholderSenha,
+  #placeholderNovoNome,
+  #placeholderNovoId,
+  #placeholderNovaSenha {
+    left: 14px;
+    font-size: 1.1rem;
+  }
+
+  .conteudoDoModal {
+    display: flex;
+    max-height: 92vh;
+    flex-direction: column;
+    overflow-y: auto;
+    border-radius: 16px;
+  }
+
+  .imageFilme {
+    width: 100%;
+    max-height: 32vh;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .informacoesFilme {
+    gap: 14px;
+    padding: 14px 16px 18px;
+  }
+
+  .nomeEAnoDoFilme {
+    gap: 10px;
+  }
+
+  .classificacaoIndicativa {
+    top: 0;
+    right: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .containerFormChange {
+    transition: none;
+  }
+}

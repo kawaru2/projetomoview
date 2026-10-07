@@ -1,10 +1,11 @@
 import { obterClassiIndicativa } from "../utils/obterClassiIndicativa"
-import { MoviewContext } from "../context/context"
+import { MoviewContext } from "../context/criandoContexto"
 import { useContext } from "react"
 import { obterGeneros } from "../utils/obterGeneros"
 import "./modalBio.css"
 export function ModalBio({ filme, setModal }) {
   const { indicacaoIdade, generosFilmes } = useContext(MoviewContext);
+
   return (
     <div className="sobreposicaoModal" onClick={setModal}>
       <div className="conteudoDoModal" onClick={(e) => e.stopPropagation()}>

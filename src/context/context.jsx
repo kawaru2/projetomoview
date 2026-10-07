@@ -1,10 +1,7 @@
-// Import createContext, useContext, useState, useEffect
-// Import api
-import { useState, createContext } from 'react'
+import { useState, useMemo } from 'react'
 import { useEffect } from 'react'
 import { key } from '../service/apiKey'
-
-export const MoviewContext = createContext();
+import { MoviewContext } from "./criandoContexto"
 
 export function MoviewProvider({ children }) {
   const [isLogado, setIsLogado] = useState(() => {
@@ -19,14 +16,29 @@ export function MoviewProvider({ children }) {
   const [ filmesTopRated, setFilmesTopRated ] = useState(null);
   const [ generosFilmes, setGenerosFilmes ] = useState([]);
   const [ indicacaoIdade, setIndicacaoIdade ] = useState(null);
+  const [ filmesPopulares, setFilmesPopulares ] = useState(null);
+  const [ trendingFilmesWeek, setTrendingFilmesWeek ] = useState(null);
 
-  const options = {
+  const options = useMemo(() => ({
     method: "GET",
     headers: {
       accept: "application/json",
       Authorization: `Bearer ${key}`
     },
-  }
+  }), []);
+
+  useEffect(() => {
+    fetch("https://api.themoviedb.org/3/trending/movie/week?language=pt-BR", options)
+    .then(filme => filme.json())
+    .then(resultado => setTrendingFilmesWeek(resultado))
+  }, [options])
+
+  useEffect(() => {
+    fetch("https://api.themoviedb.org/3/movie/popular?language=pt-BR&page=1", options)
+    .then(filme => filme.json())
+    .then(resultado => setFilmesPopulares(resultado))
+    .catch(erro => console.log(erro));
+  }, [options])
 
   useEffect(() => {
     if (!filmesTopRated ?. results) return;
@@ -41,26 +53,33 @@ export function MoviewProvider({ children }) {
     )
     .then(resultados => setIndicacaoIdade(Object.fromEntries(resultados)))
     .catch(console.error)
-  }, [filmesTopRated])
+  }, [filmesTopRated, options])
 
   useEffect(() => {
-    fetch("https://api.themoviedb.org/3/movie/top_rated?language=pt-BR&page=1", options)
+    fetch("https://api.themoviedb.org/3/discover/movie?sort_by=vote_count.desc&language=pt-BR&page=1", options)
     .then(res => res.json())
     .then(res => setFilmesTopRated(res))
     .catch(console.error);
-  }, [])
+  }, [options])
 
   useEffect(() => {
     fetch("https://api.themoviedb.org/3/genre/movie/list?language=pt-BR", options)
     .then(res => res.json())
     .then(data => setGenerosFilmes(data.genres))
     .catch(console.error);
-  }, [])
+  }, [options])
 
   return (
-    <MoviewContext.Provider value = {{isLogado, setIsLogado, filmesTopRated, generosFilmes, indicacaoIdade}}>
+    <MoviewContext.Provider value = {{
+      isLogado,
+      setIsLogado,
+      filmesTopRated,
+      filmesPopulares,
+      generosFilmes,
+      indicacaoIdade,
+      trendingFilmesWeek,
+      }}>
       {children}
     </MoviewContext.Provider>
   );
 }
-

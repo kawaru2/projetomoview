@@ -1,12 +1,13 @@
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MoviewContext } from '../context/context'
+import { MoviewContext } from '../context/criandoContexto'
 import { obterClassiIndicativa } from '../utils/obterClassiIndicativa';
 import { obterGeneros } from "../utils/obterGeneros"
+import "../components/modalBio.css"
 
 export function Home() {
-  const { filmesTopRated, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
-  const filmes = filmesTopRated ?.results?.slice(0, 3) ?? [];
+  const { filmesPopulares, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
+  const filmes = filmesPopulares ?.results?.slice(0, 3) ?? [];
   const navigate = useNavigate();
   const [ cardHover, setCardHover ] = useState(null);
   const [ modalFilme, setModalFilme ] = useState(null);
@@ -21,7 +22,7 @@ export function Home() {
           <p id="subTituloBemVindo">Pesquise sobre filmes, leia a biografia, veja a avaliação e muito mais!</p>
         </div>
         <div id="maisPopularesHome">
-          <h2 id="tituloMaisPopulares">Os 3 filmes mais populares no momento:</h2>
+          <h2 id="tituloMaisPopulares">Os 3 filmes com destaques no momento:</h2>
           <div id="filmes">
             { filmes.map(filme => {
               return (
@@ -45,7 +46,9 @@ export function Home() {
                     </p>
                 </div>
                   <div className={`overlayFilme ${cardHover === filme.title ? "active" : ""}`}>
-                    <button type="button" className="btnVerMais" onClick={() => setModalFilme(filme)}>Ver mais</button>
+                    <button type="button" className="btnVerMais" onClick={() => {
+                      setModalFilme(filme);
+                    }}>Ver mais</button>
                     <div className="secaoFavoritar">
                       <label htmlFor="checkFavorite">{!checkFavorite[filme.title] ? "Favoritar: " : "Favorito: "}</label>
                       <button id="checkFavorite" type="button" className="btnFavorite" name="checkFavorite" onClick={() => setCheckFavorite(prev => ({
