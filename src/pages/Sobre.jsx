@@ -9,7 +9,21 @@ const tecnologias = [
   { nome: "TMDB API", detalhe: "Informações sobre filmes" },
 ]
 
-const redesSociais = ["GitHub", "LinkedIn", "Instagram"]
+const redesSociais = [
+  {
+    nome: "Github",
+    url: "https://github.com/kawaru2"
+  },
+  {
+    nome: "Linkedin",
+    url: "https://linkedin.com/in/joaopedrocb2"
+  },
+  {
+    nome: "Instagram",
+    url: "https://instagram.com/_joao.code"
+  },
+
+];
 
 export function Sobre() {
   return (
@@ -83,12 +97,12 @@ export function Sobre() {
         </div>
         <div className="sobreDesenvolvedorRedesSociais">
           <h3>Vamos nos conectar</h3>
-          <p>Adicione seus perfis para que as pessoas possam encontrar você.</p>
+          <p>Encontre-me nas redes sociais e acompanhe os meus projetos.</p>
           <ul>
             {redesSociais.map((rede) => (
-              <li key={rede}>
-                <span>{rede}</span>
-                <span className="sobreRedeSocialLinkPlaceholder">adicione seu link <span aria-hidden="true">↗</span></span>
+              <li key={rede.nome}>
+              <span>{rede.nome}</span>
+                <span className="sobreRedeSocialLinkPlaceholder"><a href={rede.url} target="_blank">{rede.url}</a><span aria-hidden="true">↗</span></span>
               </li>
             ))}
           </ul>
