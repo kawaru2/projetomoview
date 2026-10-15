@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { MoviewContext } from "./criandoContexto"
 import { supabase, supabaseConfigError } from "../service/supabase"
+import { mensagemErro } from "../utils/mensagemErro"
 
 async function buscarDadosTMDB(endpoint, parametros = {}) {
   const query = new URLSearchParams({ endpoint, ...parametros })
@@ -46,6 +47,7 @@ export function MoviewProvider({ children }) {
         userIdAtual.current = novoUserId
         setFavoritos([])
         setErroFavoritos(null)
+        setCarregandoFavoritos(Boolean(novoUserId))
       }
 
       setUser(novoUsuario)
@@ -72,7 +74,9 @@ export function MoviewProvider({ children }) {
         if (!providerAtivo) return
 
         if (error) {
-          setErroAutenticacao(error.message)
+          setErroAutenticacao(
+            mensagemErro(error, "Não foi possível verificar sua sessão.")
+          )
         } else {
           setErroAutenticacao(null)
           if (!eventoDeAutenticacaoRecebido) {
@@ -82,7 +86,7 @@ export function MoviewProvider({ children }) {
       } catch (error) {
         if (providerAtivo) {
           setErroAutenticacao(
-            error instanceof Error ? error.message : String(error)
+            mensagemErro(error, "Não foi possível verificar sua sessão.")
           )
         }
       } finally {
@@ -133,7 +137,7 @@ export function MoviewProvider({ children }) {
     carregarFavoritos().catch(error => {
       if (providerAtivo) {
         setErroFavoritos(
-          error instanceof Error ? error.message : String(error)
+          mensagemErro(error, "Não foi possível carregar seus favoritos.")
         )
         setFavoritos([])
         setCarregandoFavoritos(false)
@@ -202,11 +206,16 @@ export function MoviewProvider({ children }) {
     if (!user) throw new Error("Entre na sua conta para salvar favoritos.")
     if (!supabase) throw new Error(supabaseConfigError)
 
+    const movieId = Number(filme.id)
+    if (!Number.isSafeInteger(movieId)) {
+      throw new Error("Não foi possível identificar este filme para salvá-lo.")
+    }
+
     const { data, error } = await supabase
       .from("favorites")
       .insert({
         user_id: user.id,
-        movie_id: filme.id,
+        movie_id: movieId,
         movie_title: filme.title,
         poster_path: filme.poster_path ?? null,
       })
@@ -214,13 +223,26 @@ export function MoviewProvider({ children }) {
       .single()
 
     if (error?.code === "23505") {
-      return favoritos.find(favorito => favorito.movie_id === filme.id) ?? null
+      const { data: favoritoExistente, error: erroBusca } = await supabase
+        .from("favorites")
+        .select("id, user_id, movie_id, movie_title, poster_path, created_at")
+        .eq("user_id", user.id)
+        .eq("movie_id", movieId)
+        .single()
+
+      if (erroBusca) throw erroBusca
+
+      setFavoritos(current => [
+        favoritoExistente,
+        ...current.filter(favorito => favorito.movie_id !== movieId),
+      ])
+      return favoritoExistente
     }
     if (error) throw error
 
     setFavoritos(current => [
       data,
-      ...current.filter(favorito => favorito.movie_id !== filme.id),
+      ...current.filter(favorito => favorito.movie_id !== movieId),
     ])
     setErroFavoritos(null)
     return data
@@ -248,7 +270,7 @@ export function MoviewProvider({ children }) {
     if (!user) throw new Error("Entre na sua conta para salvar favoritos.")
 
     const jaFavoritado = favoritos.some(
-      favorito => favorito.movie_id === filme.id
+      favorito => String(favorito.movie_id) === String(filme.id)
     )
 
     if (jaFavoritado) {

@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { Navigate, useNavigate } from "react-router-dom"
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import { useMoviewContext } from "../hooks/useMoviewContext"
-import "react-toastify/dist/ReactToastify.css"
+import { mensagemErro } from "../utils/mensagemErro"
 
 export function Login() {
   const navigate = useNavigate()
@@ -14,7 +14,6 @@ export function Login() {
   const [senhaCadastro, setSenhaCadastro] = useState("")
   const [changeForm, setChangeForm] = useState(false)
   const [carregando, setCarregando] = useState(false)
-  const [erro, setErro] = useState(null)
 
   if (!carregandoSessao && isLogado) {
     return <Navigate to="/favoritos" replace />
@@ -22,14 +21,14 @@ export function Login() {
 
   async function enviarLogin(event) {
     event.preventDefault()
-    setErro(null)
     setCarregando(true)
 
     try {
       await entrar(email.trim(), senha)
+      toast.success("Login realizado com sucesso.")
       navigate("/", { replace: true })
     } catch (error) {
-      setErro(error instanceof Error ? error.message : String(error))
+      toast.error(mensagemErro(error, "Não foi possível entrar. Confira seus dados e tente novamente."))
     } finally {
       setCarregando(false)
     }
@@ -37,7 +36,6 @@ export function Login() {
 
   async function enviarCadastro(event) {
     event.preventDefault()
-    setErro(null)
     setCarregando(true)
 
     try {
@@ -57,7 +55,7 @@ export function Login() {
       setEmailCadastro("")
       setSenhaCadastro("")
     } catch (error) {
-      setErro(error instanceof Error ? error.message : String(error))
+      toast.error(mensagemErro(error, "Não foi possível criar sua conta. Tente novamente."))
     } finally {
       setCarregando(false)
     }
@@ -72,10 +70,7 @@ export function Login() {
             <button
               type="button"
               id="btnRegister"
-              onClick={() => {
-                setErro(null)
-                setChangeForm(true)
-              }}
+              onClick={() => setChangeForm(true)}
             >
               Criar conta
             </button>
@@ -103,7 +98,6 @@ export function Login() {
               />
               <label htmlFor="senha" id="placeholderSenha">Senha</label>
             </div>
-            {erro && !changeForm && <p className="authError" role="alert">{erro}</p>}
             <div className="entrarOuMudarSenha">
               <button
                 type="submit"
@@ -156,7 +150,6 @@ export function Login() {
                 onChange={event => setSenhaCadastro(event.target.value)}
               />
               <label htmlFor="novaSenha" id="placeholderNovaSenha">Senha (mínimo 8 caracteres)</label>
-              {erro && changeForm && <p className="authError" role="alert">{erro}</p>}
               <button type="submit" className="btnEntrar" disabled={carregando}>
                 {carregando ? "Criando conta..." : "Cadastrar"}
               </button>
@@ -164,17 +157,13 @@ export function Login() {
             <button
               id="btnRegister"
               type="button"
-              onClick={() => {
-                setErro(null)
-                setChangeForm(false)
-              }}
+              onClick={() => setChangeForm(false)}
             >
               Fazer login
             </button>
           </form>
         </div>
       </div>
-      <ToastContainer />
     </main>
   )
 }

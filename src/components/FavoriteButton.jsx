@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 import { useMoviewContext } from "../hooks/useMoviewContext"
+import { mensagemErro } from "../utils/mensagemErro"
 
 export function FavoriteButton({ filme, className = "btnFavorite" }) {
   const navigate = useNavigate()
@@ -11,15 +13,13 @@ export function FavoriteButton({ filme, className = "btnFavorite" }) {
     alternarFavorito,
   } = useMoviewContext()
   const [salvando, setSalvando] = useState(false)
-  const [erro, setErro] = useState(null)
   const isFavorito = favoritos.some(
-    favorito => favorito.movie_id === filme.id
+    favorito => String(favorito.movie_id) === String(filme.id)
   )
 
   async function lidarComClique() {
-    setErro(null)
-
     if (!user) {
+      toast.info("Entre na sua conta para adicionar filmes aos favoritos.")
       navigate("/Login")
       return
     }
@@ -27,8 +27,11 @@ export function FavoriteButton({ filme, className = "btnFavorite" }) {
     setSalvando(true)
     try {
       await alternarFavorito(filme)
+      toast.success(isFavorito
+        ? "Filme removido dos favoritos."
+        : "Filme adicionado aos favoritos.")
     } catch (error) {
-      setErro(error instanceof Error ? error.message : String(error))
+      toast.error(mensagemErro(error, "Não foi possível atualizar seus favoritos. Tente novamente."))
     } finally {
       setSalvando(false)
     }
@@ -48,7 +51,6 @@ export function FavoriteButton({ filme, className = "btnFavorite" }) {
       >
         {isFavorito ? "❤️" : "🤍"}
       </button>
-      {erro && <small role="alert" className="favoriteError">{erro}</small>}
     </>
   )
 }

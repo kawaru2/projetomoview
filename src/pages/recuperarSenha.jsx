@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import { useMoviewContext } from "../hooks/useMoviewContext"
-import "react-toastify/dist/ReactToastify.css"
+import { mensagemErro } from "../utils/mensagemErro"
 
 export function RecuperarSenha() {
   const navigate = useNavigate()
@@ -16,18 +16,16 @@ export function RecuperarSenha() {
   const [novaSenha, setNovaSenha] = useState("")
   const [confirmacaoSenha, setConfirmacaoSenha] = useState("")
   const [carregando, setCarregando] = useState(false)
-  const [erro, setErro] = useState(null)
 
   async function solicitarEmail(event) {
     event.preventDefault()
-    setErro(null)
     setCarregando(true)
 
     try {
       await solicitarRecuperacao(email.trim())
       toast.success("Se o e-mail estiver cadastrado, você receberá um link para redefinir a senha.")
     } catch (error) {
-      setErro(error instanceof Error ? error.message : String(error))
+      toast.error(mensagemErro(error, "Não foi possível enviar o link. Tente novamente."))
     } finally {
       setCarregando(false)
     }
@@ -35,14 +33,13 @@ export function RecuperarSenha() {
 
   async function salvarNovaSenha(event) {
     event.preventDefault()
-    setErro(null)
 
     if (novaSenha.length < 8) {
-      setErro("A senha deve ter pelo menos 8 caracteres.")
+      toast.error("A senha deve ter pelo menos 8 caracteres.")
       return
     }
     if (novaSenha !== confirmacaoSenha) {
-      setErro("As senhas não correspondem.")
+      toast.error("As senhas não correspondem.")
       return
     }
 
@@ -52,7 +49,7 @@ export function RecuperarSenha() {
       toast.success("Senha atualizada. Você já pode entrar com a nova senha.")
       setTimeout(() => navigate("/Login", { replace: true }), 1200)
     } catch (error) {
-      setErro(error instanceof Error ? error.message : String(error))
+      toast.error(mensagemErro(error, "Não foi possível atualizar a senha. Tente novamente."))
     } finally {
       setCarregando(false)
     }
@@ -64,7 +61,6 @@ export function RecuperarSenha() {
 
   return (
     <main className="telaLogin">
-      <ToastContainer />
       <form
         className="form effect"
         onSubmit={emRecuperacaoSenha ? salvarNovaSenha : solicitarEmail}
@@ -124,7 +120,6 @@ export function RecuperarSenha() {
             </label>
           </div>
         )}
-        {erro && <p className="authError" role="alert">{erro}</p>}
         <button
           type="submit"
           className="btnEsqueciSenha btnMin"

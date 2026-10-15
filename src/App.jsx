@@ -8,11 +8,14 @@ import { Login } from './pages/Login'
 import { RecuperarSenha } from './pages/recuperarSenha'
 import { Favoritos } from './pages/Favoritos'
 import { AuthCallback } from './pages/AuthCallback'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   return (
     <>
       <Header />
+      <ToastContainer position="top-right" autoClose={4000} />
 
       <Routes>
         <Route path="/" element={<Home />} />

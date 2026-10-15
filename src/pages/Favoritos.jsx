@@ -1,6 +1,9 @@
+import { useEffect } from "react"
 import { Link, Navigate } from "react-router-dom"
+import { toast } from "react-toastify"
 import { FavoriteButton } from "../components/FavoriteButton"
 import { useMoviewContext } from "../hooks/useMoviewContext"
+import { mensagemErro } from "../utils/mensagemErro"
 import "./Favoritos.css"
 
 export function Favoritos() {
@@ -11,6 +14,18 @@ export function Favoritos() {
     carregandoFavoritos,
     erroFavoritos,
   } = useMoviewContext()
+
+  useEffect(() => {
+    if (erroFavoritos) {
+      toast.error(mensagemErro(erroFavoritos, "Não foi possível carregar seus favoritos."), {
+        toastId: `erro-favoritos-${user?.id}`,
+      })
+    } else if (!carregandoFavoritos && user && favoritos.length === 0) {
+      toast.info("Você ainda não adicionou filmes aos favoritos.", {
+        toastId: `favoritos-vazios-${user.id}`,
+      })
+    }
+  }, [carregandoFavoritos, erroFavoritos, favoritos.length, user])
 
   if (carregandoSessao) {
     return <main className="paginaFavoritos"><p>Verificando sua sessão...</p></main>
@@ -24,10 +39,6 @@ export function Favoritos() {
     <main className="paginaFavoritos">
       <h1>Meus favoritos</h1>
       {carregandoFavoritos && <p role="status">Carregando seus favoritos...</p>}
-      {erroFavoritos && <p role="alert" className="mensagemErro">{erroFavoritos}</p>}
-      {!carregandoFavoritos && !erroFavoritos && favoritos.length === 0 && (
-        <p>Você ainda não adicionou filmes aos favoritos.</p>
-      )}
       {!carregandoFavoritos && favoritos.length > 0 && (
         <ul className="listaFavoritos">
           {favoritos.map(favorito => (

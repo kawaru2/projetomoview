@@ -1,27 +1,35 @@
 import {Link, NavLink} from 'react-router-dom'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 import {useMoviewContext} from "../hooks/useMoviewContext"
+import { mensagemErro } from "../utils/mensagemErro"
 import logo from '../assets/logo.svg'
 
 export function Header() {
   const navigate = useNavigate()
   const {isLogado, user, carregandoSessao, sair, erroSessao} = useMoviewContext()
   const [carregandoLogout, setCarregandoLogout] = useState(false)
-  const [erroLogout, setErroLogout] = useState(null)
   const nomeUsuario =
     user?.user_metadata?.full_name?.trim().split(/\s+/)[0] ||
     user?.email?.split("@")[0] ||
     "Conta"
 
+  useEffect(() => {
+    if (erroSessao) {
+      toast.error(mensagemErro(erroSessao, "Não foi possível verificar sua sessão."), {
+        toastId: "erro-sessao",
+      })
+    }
+  }, [erroSessao])
+
   async function fazerLogout() {
-    setErroLogout(null)
     setCarregandoLogout(true)
     try {
       await sair()
       navigate("/", { replace: true })
     } catch (error) {
-      setErroLogout(error instanceof Error ? error.message : String(error))
+      toast.error(mensagemErro(error, "Não foi possível sair da conta. Tente novamente."))
     } finally {
       setCarregandoLogout(false)
     }
@@ -76,7 +84,12 @@ export function Header() {
         >
           Login
         </NavLink>
-        : <details className="menuConta">
+        : <details
+            className="menuConta"
+            onMouseLeave={event => {
+              event.currentTarget.open = false
+            }}
+          >
             <summary
               className="menuOption menuContaResumo"
             >
@@ -101,9 +114,6 @@ export function Header() {
           </details>)}
         
       </nav>
-      {(erroSessao || erroLogout) && (
-        <p role="alert" className="authError">{erroSessao || erroLogout}</p>
-      )}
     </header>
   )
 }

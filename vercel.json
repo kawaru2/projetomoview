@@ -1,0 +1,28 @@
+{
+  "rewrites": [
+    {
+      "source": "/auth/callback",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/recuperarSenha",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/favoritos",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/Login",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/Filmes",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/Sobre",
+      "destination": "/index.html"
+    }
+  ]
+}
