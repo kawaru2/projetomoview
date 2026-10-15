@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MoviewContext } from '../context/criandoContexto'
+import { FavoriteButton } from '../components/FavoriteButton'
 import { obterClassiIndicativa } from '../utils/obterClassiIndicativa';
 import { obterGeneros } from "../utils/obterGeneros"
 import "../components/modalBio.css"
@@ -11,7 +12,6 @@ export function Home() {
   const navigate = useNavigate();
   const [ cardHover, setCardHover ] = useState(null);
   const [ modalFilme, setModalFilme ] = useState(null);
-  const [ checkFavorite, setCheckFavorite ] = useState({});
 
   return (
     <main>
@@ -38,7 +38,7 @@ export function Home() {
                     <p className="filmeYear">Ano: <span className="redEffect">{filme.release_date.slice(0, 4) ?? "Sem informações"}</span></p>
                     <div className="classificacao">
                       <p className="voteAverage">⭐ {filme ?. vote_average.toFixed(1)}</p>
-                      <p className="filmeFavorite">{!checkFavorite[filme.title] ? "🤍" : "❤️"} {filme ?. vote_count}</p>
+                      <p className="filmeFavorite">⭐ {filme ?. vote_count}</p>
                     </div>
                     <p className="categorias redEffect">{
                       obterGeneros(filme.genre_ids, generosFilmes)
@@ -50,13 +50,8 @@ export function Home() {
                       setModalFilme(filme);
                     }}>Ver mais</button>
                     <div className="secaoFavoritar">
-                      <label htmlFor="checkFavorite">{!checkFavorite[filme.title] ? "Favoritar: " : "Favorito: "}</label>
-                      <button id="checkFavorite" type="button" className="btnFavorite" name="checkFavorite" onClick={() => setCheckFavorite(prev => ({
-                        ...prev,
-                        [filme.title]: !prev[filme.title]
-                      }))} >
-                        {!checkFavorite[filme.title] ? "🤍" : "❤️"}
-                      </button>
+                      <span>Favoritar:</span>
+                      <FavoriteButton filme={filme} />
                     </div>
                   </div>
                 </div>
@@ -78,12 +73,10 @@ export function Home() {
               </div>
               <div className="secaoFavoritar" id="secaoFavoritarModal">
                 <p className="popularidadeFilmeModal">Popularidade ⭐: {modalFilme ?. vote_average.toFixed(1)}</p>
-                <button className="btnFavorite btnFavoriteModal" onClick={() => setCheckFavorite(prev => ({
-                  ...prev,
-                  [modalFilme.title]: !prev[modalFilme.title]
-                  }))} >
-                  {!checkFavorite[modalFilme.title] ? "🤍" : "❤️"}
-                  </button>
+                <FavoriteButton
+                  filme={modalFilme}
+                  className="btnFavorite btnFavoriteModal"
+                />
                   <p className={`indicacaoIdade ${obterClassiIndicativa(indicacaoIdade[modalFilme.id])}`}>
                     {indicacaoIdade[modalFilme.id]}
                   </p>

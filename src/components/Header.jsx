@@ -1,9 +1,27 @@
 import {Link, NavLink} from 'react-router-dom'
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import {useMoviewContext} from "../hooks/useMoviewContext"
 import logo from '../assets/logo.svg'
 
 export function Header() {
-  const {isLogado, user} = useMoviewContext();
+  const navigate = useNavigate()
+  const {isLogado, user, carregandoSessao, sair, erroSessao} = useMoviewContext()
+  const [carregandoLogout, setCarregandoLogout] = useState(false)
+  const [erroLogout, setErroLogout] = useState(null)
+
+  async function fazerLogout() {
+    setErroLogout(null)
+    setCarregandoLogout(true)
+    try {
+      await sair()
+      navigate("/", { replace: true })
+    } catch (error) {
+      setErroLogout(error instanceof Error ? error.message : String(error))
+    } finally {
+      setCarregandoLogout(false)
+    }
+  }
   
   return (
     <header className="cabecalho">
@@ -12,7 +30,6 @@ export function Header() {
           to="/" 
           title="Voltar ao início"
           onClick={() => console.log("Fechar menu")}
-          end
         >
           <img src={logo} alt="" id="imgLogo" />
         </Link>
@@ -21,7 +38,6 @@ export function Header() {
           title="Voltar ao início"
           id="nomeEmpresa" 
           onClick={() => console.log("Fechar menu")} 
-          end
         >
         Moview
         </Link>
@@ -49,19 +65,37 @@ export function Header() {
           Sobre
         </NavLink>
 
-        {
-        !isLogado ?
+        {!carregandoSessao && (!isLogado ?
         <NavLink
           to="/Login"
           className={({isActive}) => `menuOption ${isActive ? "menuAtivo" : ""}`}
         >
           Login
         </NavLink>
-        :
-        <NavLink>Olá, {user.nome}</NavLink>
-        }
+        : <>
+          <NavLink
+            to="/favoritos"
+            className={({isActive}) => `menuOption ${isActive ? "menuAtivo" : ""}`}
+          >
+            Meus favoritos
+          </NavLink>
+          <span className="menuOption">
+            Olá, {user?.user_metadata?.full_name || user?.email}
+          </span>
+          <button
+            type="button"
+            className="menuOption"
+            onClick={fazerLogout}
+            disabled={carregandoLogout}
+          >
+            {carregandoLogout ? "Saindo..." : "Sair"}
+          </button>
+        </>)}
         
       </nav>
+      {(erroSessao || erroLogout) && (
+        <p role="alert" className="authError">{erroSessao || erroLogout}</p>
+      )}
     </header>
   )
 }

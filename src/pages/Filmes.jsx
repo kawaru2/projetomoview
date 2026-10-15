@@ -1,12 +1,12 @@
 import { useContext, useState } from "react"
 import { MoviewContext } from "../context/criandoContexto"
 import { ModalBio } from "../components/modalBio"
+import { FavoriteButton } from "../components/FavoriteButton"
 import { obterGeneros } from "../utils/obterGeneros"
 import { Carrossel } from "../components/carrossel"
 import "./Filmes.css"
 export function Filmes() {
   const { filmesTopRated, generosFilmes, trendingFilmesWeek } = useContext(MoviewContext);
-  const [ favoritar, setFavoritar ] = useState({});
   const [ modalBio, setModalBio ] = useState(null);
 
   // Teste do Node (back-end).
@@ -38,14 +38,11 @@ export function Filmes() {
               <p className="voteAverageDeFilmes">
                 ⭐ {filme ?. vote_average.toFixed(1)}
               </p>
-              <button
-              className="btnFavoritarFilme"
-              onClick={() => setFavoritar(prev => ({
-                ...prev, [filme.title]: !prev[filme.title]
-              }))}
-              >
-                {`${!favoritar[filme.title] ? "🤍" : "❤️"} ${filme ?. vote_count}`}
-              </button>
+              <FavoriteButton
+                filme={filme}
+                className="btnFavoritarFilme"
+              />
+              <span>{filme ?. vote_count}</span>
             </div>
               <p className="categoriasDoFilme">
                 Categorias:<br/><span>{obterGeneros(filme.genre_ids, generosFilmes)}</span>

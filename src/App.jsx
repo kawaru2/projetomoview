@@ -6,6 +6,7 @@ import { Filmes } from './pages/Filmes'
 import { Sobre } from './pages/Sobre'
 import { Login } from './pages/Login'
 import { RecuperarSenha } from './pages/recuperarSenha'
+import { Favoritos } from './pages/Favoritos'
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
         <Route path="*" element={<Home />} />
 
         <Route path="/recuperarSenha" element={<RecuperarSenha />} />
+
+        <Route path="/favoritos" element={<Favoritos />} />
       </Routes>
 
       {/* <Footer /> */}

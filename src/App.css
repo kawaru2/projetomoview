@@ -87,6 +87,20 @@ html, body {
   background-size: 100% 4px;
 }
 
+.menu button.menuOption {
+  border: 0;
+  padding: 0 0 6px;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.authError {
+  max-width: 90%;
+  color: #8b0000;
+  font-size: .9rem;
+  text-align: center;
+}
+
 /* LOGIN PAGE */
 
 .telaLogin {

@@ -1,0 +1,68 @@
+.paginaFavoritos {
+  width: min(100% - 32px, 1100px);
+  margin: 36px auto;
+  padding: 28px;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.paginaFavoritos h1 {
+  margin-bottom: 20px;
+}
+
+.listaFavoritos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+  list-style: none;
+}
+
+.itemFavorito {
+  display: flex;
+  min-height: 150px;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+}
+
+.itemFavorito img,
+.posterFavoritoVazio {
+  width: 90px;
+  min-width: 90px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.posterFavoritoVazio {
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  background: #eee;
+  text-align: center;
+}
+
+.itemFavorito h2 {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.favoriteControl {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.favoriteError,
+.mensagemErro {
+  color: #a00000;
+}
+
+.favoriteControl button:disabled {
+  cursor: wait;
+  opacity: .6;
+}
