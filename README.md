@@ -1,180 +1,131 @@
-# 🎬 Moview
+# Moview
 
-<div align="center">
+Catálogo de filmes em React com dados da TMDB, autenticação Supabase e lista
+privada de favoritos.
 
-![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)
-![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?style=for-the-badge&logo=vite)
-![React Router](https://img.shields.io/badge/React_Router-7-CA4245?style=for-the-badge&logo=reactrouter)
-![Status](https://img.shields.io/badge/Status-em_desenvolvimento-orange?style=for-the-badge)
+## Funcionalidades
 
-<p>
-  Um projeto de catálogo e navegação de filmes, pensado para entregar uma experiência moderna, elegante e funcional.
-</p>
+- Página inicial com três filmes populares e cartões no layout original.
+- Catálogo de filmes com tendências e filmes mais bem avaliados.
+- Carrossel interativo: selecionar um filme abre o modal com a biografia.
+- Modal de filme com sinopse, gêneros, classificação indicativa e ação para
+  adicionar/remover dos favoritos.
+- Cadastro, confirmação de e-mail, login, logout e recuperação de senha pelo
+  Supabase Auth.
+- Lista de favoritos privada por usuário, com sinopse resumida e acesso à
+  biografia completa.
+- Notificações toast em português e transições suaves entre páginas.
+- Layout responsivo e imagem de fundo da página de login otimizada.
 
-</div>
+## Tecnologias
 
----
-
-## ✨ Sobre o projeto
-
-O Moview é uma aplicação front-end em React que simula uma plataforma de filmes com foco em apresentação visual, navegação intuitiva e autenticação básica. O projeto foi desenvolvido para exercitar conceitos de rotas, contexto, componentes reutilizáveis e experiência de usuário moderna.
-
-A ideia central é criar uma interface atrativa para uma aplicação de entretenimento, com destaque para:
-
-- página inicial com identidade visual marcante;
-- navegação por seções e rotas;
-- autenticação com Supabase, confirmação de e-mail e recuperação de senha;
-- catálogo de filmes integrado à TMDB;
-- favoritos privados por usuário;
-- modal com sinopse, gêneros e classificação indicativa;
-- transições suaves entre páginas;
-- layout responsivo e moderno;
-- estrutura preparada para evoluir com catálogo real de filmes.
-
----
-
-## 🚀 Funcionalidades
-
-- Login com validação visual de campos
-- Mensagens de feedback com toast notifications
-- Recuperação de senha
-- Navegação entre páginas com React Router
-- Estrutura de contexto para gerenciamento de estado do usuário
-- Layout responsivo e visual clean
-- Cartões de filmes compartilhados pela página inicial e pelo catálogo
-- Favoritar/remover filmes e consultar sinopses detalhadas
-
----
-
-## 🛠️ Stack utilizada
-
-- React
-- Vite
-- React Router DOM
+- React 19 e Vite 8
+- React Router 7
+- Supabase Auth e PostgreSQL com Row Level Security (RLS)
+- API da TMDB acessada por uma função serverless da Vercel
 - React Toastify
-- CSS moderno para estilização da interface
 
----
+## Executar localmente
 
-## 📁 Estrutura do projeto
+Requisitos: Node.js e npm.
 
-```bash
-projetomoview/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── context/
-│   ├── hooks/
-│   ├── pages/
-│   ├── App.jsx
-│   ├── App.css
-│   ├── main.jsx
-│   └── index.css
-├── eslint.config.js
-├── index.html
-├── package.json
-├── vite.config.js
-├── README.md
-└── .gitignore
-```
+1. Clone e acesse o repositório:
 
----
+   ```bash
+   git clone https://github.com/kawaru2/projetomoview.git
+   cd projetomoview
+   ```
 
-## ▶️ Como executar localmente
+2. Instale as dependências:
 
-1. Clone o repositório:
+   ```bash
+   npm install
+   ```
 
-```bash
-git clone https://github.com/seu-usuario/projetomoview.git
-```
+3. Crie `.env.local` na raiz do projeto:
 
-2. Acesse a pasta do projeto:
+   ```env
+   TMDB_READ_ACCESS_TOKEN=seu_token_privado_da_tmdb
+   VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+   VITE_SUPABASE_ANON_KEY=sua_chave_publica_publishable
+   ```
 
-```bash
-cd projetomoview
-```
+   `TMDB_READ_ACCESS_TOKEN` é um segredo de servidor: não use o prefixo
+   `VITE_`. `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` são valores
+   públicos do frontend; a chave deve ser Publishable/anon, nunca `Secret` ou
+   `service_role`. `.env.local` é ignorado pelo Git.
 
-3. Instale as dependências:
+4. Prepare Supabase Auth, Redirect URLs e a tabela `public.favorites` com RLS.
+   Siga o [guia de uso do Supabase](./GUIA-USO-SUPABASE.md).
 
-```bash
-npm install
-```
+5. Inicie a aplicação:
 
-4. Crie um arquivo `.env.local` na raiz do projeto e adicione seu token de leitura da TMDB:
+   ```bash
+   npm run dev
+   ```
 
-```env
-TMDB_READ_ACCESS_TOKEN=seu_token_de_leitura_da_tmdb
-```
+   Abra a URL informada pelo Vite, normalmente `http://localhost:5173`.
 
-O token é usado apenas pelo endpoint de servidor. Não use o prefixo `VITE_`, pois variáveis com esse prefixo podem ser incluídas no código enviado ao navegador.
+## Supabase
 
-5. Inicie o servidor de desenvolvimento:
+A tabela `favorites` guarda o ID do usuário, ID/título do filme, pôster e
+data de criação. As policies RLS limitam cada usuário aos próprios registros.
+O esquema e as instruções para configurar o SQL Editor estão em
+[GUIA-USO-SUPABASE.md](./GUIA-USO-SUPABASE.md).
 
-```bash
-npm run dev
-```
+Na confirmação de cadastro, o Supabase retorna para `/auth/callback`; a
+recuperação de senha usa `/recuperarSenha`. Adicione esses caminhos às
+Redirect URLs do projeto Supabase. O arquivo [vercel.json](./vercel.json)
+configura o fallback das rotas da aplicação para a SPA.
 
-6. Abra no navegador a URL exibida no terminal, normalmente:
-
-```bash
-http://localhost:5173
-```
-
-## ☁️ Deploy na Vercel
+## Deploy na Vercel
 
 1. Importe o repositório na Vercel.
-2. Em **Settings → Environment Variables**, configure `TMDB_READ_ACCESS_TOKEN` com seu token de leitura da TMDB para os ambientes desejados.
-3. Faça um novo deploy após salvar a variável.
+2. Cadastre `TMDB_READ_ACCESS_TOKEN`, `VITE_SUPABASE_URL` e
+   `VITE_SUPABASE_ANON_KEY` nas variáveis de ambiente dos ambientes usados.
+3. Configure Site URL e Redirect URLs no Supabase para o domínio publicado.
+4. Faça o deploy. Ao alterar variáveis `VITE_*`, gere um novo build/deploy.
 
-As consultas passam pela função `api/tmdb.js`, que mantém o token no servidor e permite somente os endpoints da TMDB usados pelo site.
+A função [`api/tmdb.js`](./api/tmdb.js) usa o token privado para consultar a
+TMDB. A lista de endpoints permitidos é implementada em
+[`server/tmdb.js`](./server/tmdb.js); os detalhes de cada filme são consultados
+sob demanda para exibir sinopses e o modal.
 
----
+Consulte [GUIA-BACKEND-VERCEL-SUPABASE.md](./GUIA-BACKEND-VERCEL-SUPABASE.md)
+para entender como o frontend, Vercel, Supabase e TMDB se comunicam.
 
-## 📜 Scripts disponíveis
+## Scripts
 
-```bash
-npm run dev
+| Comando | Descrição |
+| --- | --- |
+| `npm run dev` | Inicia o servidor local do Vite. |
+| `npm run build` | Gera o build de produção em `dist/`. |
+| `npm run preview` | Serve localmente o build de produção. |
+| `npm run lint` | Executa o ESLint. |
+
+## Estrutura principal
+
+```text
+api/                 Função serverless da TMDB na Vercel
+server/              Validação e lógica compartilhada da API TMDB
+src/components/      Header, carrossel, modal e botão de favoritos
+src/context/         Sessão, dados de filmes e estado dos favoritos
+src/pages/           Home, catálogo, favoritos, login e outras páginas
+src/service/         Cliente Supabase
+src/utils/           Formatação de erros, gêneros e classificação
+GUIA-USO-SUPABASE.md Guia de configuração do Supabase
+GUIA-BACKEND-VERCEL-SUPABASE.md
+                     Arquitetura e operação do backend
 ```
 
-Inicia a aplicação em modo de desenvolvimento.
+## Segurança
 
-```bash
-npm run build
-```
+- Nunca publique `.env.local`, tokens da TMDB, chaves `Secret` ou
+  `service_role`.
+- As operações de favoritos usam a chave pública do Supabase e dependem das
+  policies RLS no banco para isolar os dados dos usuários.
+- Não remova nem abra as policies RLS para `anon`.
 
-Gera a build de produção.
+## Autor
 
-```bash
-npm run preview
-```
-
-Previsualiza a versão final do projeto.
-
-```bash
-npm run lint
-```
-
-Executa a análise estática do código.
-
----
-
-## 🎯 Status do projeto
-
-Este projeto está em desenvolvimento contínuo, com foco em evoluir a interface e as funcionalidades principais de uma plataforma de filmes.
-
----
-
-## 📌 Autor
-
-Projeto desenvolvido como estudo e protótipo de front-end em React.
-
-> "A experiência do usuário é o maior diferencial de um produto digital."
-
-<div align="center">
-  <h3 style="color:#61DAFB; margin: 1rem 0 0.5rem; font-size: 1.7rem;">
-    João Barros
-  </h3>
-  <p style="margin: 0; font-weight: 700; letter-spacing: 0.08em; color: #f1f5f9; text-transform: uppercase;">
-    Autor
-  </p>
-</div>
+Projeto desenvolvido por João Barros.
