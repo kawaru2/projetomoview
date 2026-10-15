@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { MoviewContext } from "./criandoContexto"
-import { supabase } from "../service/supabase"
+import { supabase, supabaseConfigError } from "../service/supabase"
 
 async function buscarDadosTMDB(endpoint, parametros = {}) {
   const query = new URLSearchParams({ endpoint, ...parametros })
@@ -15,14 +15,15 @@ async function buscarDadosTMDB(endpoint, parametros = {}) {
 
 export function MoviewProvider({ children }) {
   const [user, setUser] = useState(null)
-  const [carregandoSessao, setCarregandoSessao] = useState(true)
-  const [erroSessao, setErroSessao] = useState(null)
+  const [carregandoSessao, setCarregandoSessao] = useState(Boolean(supabase))
+  const [erroAutenticacao, setErroAutenticacao] = useState(null)
   const [emRecuperacaoSenha, setEmRecuperacaoSenha] = useState(false)
   const [favoritos, setFavoritos] = useState([])
   const [carregandoFavoritos, setCarregandoFavoritos] = useState(false)
   const [erroFavoritos, setErroFavoritos] = useState(null)
   const userIdAtual = useRef(null)
   const userId = user?.id ?? null
+  const erroSessao = supabase ? erroAutenticacao : supabaseConfigError
   const [filmesTopRated, setFilmesTopRated] = useState(null)
   const [generosFilmes, setGenerosFilmes] = useState([])
   const [indicacaoIdade, setIndicacaoIdade] = useState(null)
@@ -32,6 +33,10 @@ export function MoviewProvider({ children }) {
   useEffect(() => {
     let providerAtivo = true
     let eventoDeAutenticacaoRecebido = false
+
+    if (!supabase) {
+      return
+    }
 
     function atualizarUsuario(session) {
       const novoUsuario = session?.user ?? null
@@ -50,7 +55,7 @@ export function MoviewProvider({ children }) {
       (evento, session) => {
         eventoDeAutenticacaoRecebido = true
         atualizarUsuario(session)
-        setErroSessao(null)
+        setErroAutenticacao(null)
         setCarregandoSessao(false)
         if (evento === "PASSWORD_RECOVERY") {
           setEmRecuperacaoSenha(true)
@@ -67,16 +72,16 @@ export function MoviewProvider({ children }) {
         if (!providerAtivo) return
 
         if (error) {
-          setErroSessao(error.message)
+          setErroAutenticacao(error.message)
         } else {
-          setErroSessao(null)
+          setErroAutenticacao(null)
           if (!eventoDeAutenticacaoRecebido) {
             atualizarUsuario(data.session)
           }
         }
       } catch (error) {
         if (providerAtivo) {
-          setErroSessao(
+          setErroAutenticacao(
             error instanceof Error ? error.message : String(error)
           )
         }
@@ -141,12 +146,14 @@ export function MoviewProvider({ children }) {
   }, [userId])
 
   async function cadastrar(email, password, nome) {
+    if (!supabase) throw new Error(supabaseConfigError)
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { full_name: nome },
-        emailRedirectTo: `${window.location.origin}/Login`,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     })
 
@@ -155,6 +162,8 @@ export function MoviewProvider({ children }) {
   }
 
   async function entrar(email, password) {
+    if (!supabase) throw new Error(supabaseConfigError)
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -165,11 +174,15 @@ export function MoviewProvider({ children }) {
   }
 
   async function sair() {
+    if (!supabase) throw new Error(supabaseConfigError)
+
     const { error } = await supabase.auth.signOut()
     if (error) throw error
   }
 
   async function solicitarRecuperacao(email) {
+    if (!supabase) throw new Error(supabaseConfigError)
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/recuperarSenha`,
     })
@@ -178,6 +191,8 @@ export function MoviewProvider({ children }) {
   }
 
   async function atualizarSenha(password) {
+    if (!supabase) throw new Error(supabaseConfigError)
+
     const { error } = await supabase.auth.updateUser({ password })
     if (error) throw error
     setEmRecuperacaoSenha(false)
@@ -185,6 +200,7 @@ export function MoviewProvider({ children }) {
 
   async function adicionarFavorito(filme) {
     if (!user) throw new Error("Entre na sua conta para salvar favoritos.")
+    if (!supabase) throw new Error(supabaseConfigError)
 
     const { data, error } = await supabase
       .from("favorites")
@@ -212,6 +228,7 @@ export function MoviewProvider({ children }) {
 
   async function removerFavorito(movieId) {
     if (!user) throw new Error("Entre na sua conta para gerenciar favoritos.")
+    if (!supabase) throw new Error(supabaseConfigError)
 
     const { error } = await supabase
       .from("favorites")

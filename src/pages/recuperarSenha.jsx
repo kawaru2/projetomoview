@@ -65,12 +65,10 @@ export function RecuperarSenha() {
   return (
     <main className="telaLogin">
       <ToastContainer />
-      <div className="containerForm effect">
-        <div className="containerFormChange">
-          <form
-            className="form front"
-            onSubmit={emRecuperacaoSenha ? salvarNovaSenha : solicitarEmail}
-          >
+      <form
+        className="form effect"
+        onSubmit={emRecuperacaoSenha ? salvarNovaSenha : solicitarEmail}
+      >
         <button
           type="button"
           id="btnRegister"
@@ -136,9 +134,7 @@ export function RecuperarSenha() {
             ? "Aguarde..."
             : emRecuperacaoSenha ? "Salvar nova senha" : "Enviar link"}
         </button>
-          </form>
-        </div>
-      </div>
+      </form>
     </main>
   )
 }

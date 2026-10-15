@@ -9,6 +9,10 @@ export function Header() {
   const {isLogado, user, carregandoSessao, sair, erroSessao} = useMoviewContext()
   const [carregandoLogout, setCarregandoLogout] = useState(false)
   const [erroLogout, setErroLogout] = useState(null)
+  const nomeUsuario =
+    user?.user_metadata?.full_name?.trim().split(/\s+/)[0] ||
+    user?.email?.split("@")[0] ||
+    "Conta"
 
   async function fazerLogout() {
     setErroLogout(null)
@@ -72,25 +76,29 @@ export function Header() {
         >
           Login
         </NavLink>
-        : <>
-          <NavLink
-            to="/favoritos"
-            className={({isActive}) => `menuOption ${isActive ? "menuAtivo" : ""}`}
-          >
-            Meus favoritos
-          </NavLink>
-          <span className="menuOption">
-            Olá, {user?.user_metadata?.full_name || user?.email}
-          </span>
-          <button
-            type="button"
-            className="menuOption"
-            onClick={fazerLogout}
-            disabled={carregandoLogout}
-          >
-            {carregandoLogout ? "Saindo..." : "Sair"}
-          </button>
-        </>)}
+        : <details className="menuConta">
+            <summary
+              className="menuOption menuContaResumo"
+            >
+              {nomeUsuario}
+            </summary>
+            <div className="menuContaDropdown">
+              <NavLink
+                to="/favoritos"
+                className={({isActive}) => `menuOption ${isActive ? "menuAtivo" : ""}`}
+              >
+                Meus favoritos
+              </NavLink>
+              <button
+                type="button"
+                className="menuOption"
+                onClick={fazerLogout}
+                disabled={carregandoLogout}
+              >
+                {carregandoLogout ? "Saindo..." : "Sair"}
+              </button>
+            </div>
+          </details>)}
         
       </nav>
       {(erroSessao || erroLogout) && (

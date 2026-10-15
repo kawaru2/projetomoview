@@ -7,18 +7,24 @@ import { obterGeneros } from "../utils/obterGeneros"
 import "../components/modalBio.css"
 
 export function Home() {
-  const { filmesPopulares, generosFilmes, indicacaoIdade } = useContext(MoviewContext);
+  const { filmesPopulares, generosFilmes, indicacaoIdade, user } = useContext(MoviewContext);
   const filmes = filmesPopulares ?.results?.slice(0, 3) ?? [];
   const navigate = useNavigate();
   const [ cardHover, setCardHover ] = useState(null);
   const [ modalFilme, setModalFilme ] = useState(null);
+  const nomeUsuario =
+    user?.user_metadata?.full_name?.trim().split(/\s+/)[0] ||
+    user?.email?.split("@")[0];
 
   return (
     <main>
       <div id="conteudoHome">
         <div id="apresentacao">
-          {/* Olá, user. Seja... */}
-          <h1 id="bemVindoUser">Olá, seja-vindo ao Moview!</h1>
+          <h1 id="bemVindoUser">
+            {nomeUsuario
+              ? `Olá, ${nomeUsuario}. Seja bem-vindo ao Moview!`
+              : "Olá, seja-vindo ao Moview!"}
+          </h1>
           <p id="subTituloBemVindo">Pesquise sobre filmes, leia a biografia, veja a avaliação e muito mais!</p>
         </div>
         <div id="maisPopularesHome">
@@ -50,7 +56,7 @@ export function Home() {
                       setModalFilme(filme);
                     }}>Ver mais</button>
                     <div className="secaoFavoritar">
-                      <span>Favoritar:</span>
+                      <label>Favoritar:</label>
                       <FavoriteButton filme={filme} />
                     </div>
                   </div>

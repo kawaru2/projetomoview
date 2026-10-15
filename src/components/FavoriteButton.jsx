@@ -35,7 +35,7 @@ export function FavoriteButton({ filme, className = "btnFavorite" }) {
   }
 
   return (
-    <span className="favoriteControl">
+    <>
       <button
         type="button"
         className={className}
@@ -49,6 +49,6 @@ export function FavoriteButton({ filme, className = "btnFavorite" }) {
         {isFavorito ? "❤️" : "🤍"}
       </button>
       {erro && <small role="alert" className="favoriteError">{erro}</small>}
-    </span>
+    </>
   )
 }
