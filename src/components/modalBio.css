@@ -83,8 +83,11 @@
 
 .informacoesFilme {
   display: flex;
+  flex: 1;
+  min-width: 0;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 18px;
   padding: 10px 20px;
 }
 
@@ -112,11 +115,52 @@
   font-size: 1.05rem;
 }
 
+.acoesModalBio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.btnFavoritoModalBio {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border: 1px solid rgba(179, 17, 17, .25);
+  border-radius: 10px;
+  background-color: rgba(179, 17, 17, .08);
+  cursor: pointer;
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.btnFavoritoModalBio:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background-color: rgba(179, 17, 17, .16);
+}
+
+.btnFavoritoModalBio:disabled {
+  cursor: wait;
+  opacity: .6;
+}
+
+.btnFavoritoModalBio > span {
+  font-size: .85rem;
+  font-weight: 700;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sobreposicaoModal,
   .modalOverlay,
   .conteudoDoModal,
   .modalContent {
     animation: none;
+  }
+
+  .btnFavoritoModalBio {
+    transition: none;
   }
 }

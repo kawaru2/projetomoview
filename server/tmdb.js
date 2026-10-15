@@ -17,12 +17,16 @@ export async function handleTmdbRequest(method, query, token) {
   }
 
   const endpoint = query.endpoint
+  const isAllowedMovieDetails =
+    typeof endpoint === "string" && /^movie\/\d+$/.test(endpoint)
   const isAllowedMovieReleaseDates =
     typeof endpoint === "string" && /^movie\/\d+\/release_dates$/.test(endpoint)
 
   if (
     typeof endpoint !== "string" ||
-    (!allowedEndpoints.has(endpoint) && !isAllowedMovieReleaseDates)
+    (!allowedEndpoints.has(endpoint) &&
+      !isAllowedMovieDetails &&
+      !isAllowedMovieReleaseDates)
   ) {
     return {
       status: 400,

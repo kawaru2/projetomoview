@@ -4,7 +4,11 @@ import { toast } from "react-toastify"
 import { useMoviewContext } from "../hooks/useMoviewContext"
 import { mensagemErro } from "../utils/mensagemErro"
 
-export function FavoriteButton({ filme, className = "btnFavorite" }) {
+export function FavoriteButton({
+  filme,
+  className = "btnFavorite",
+  showLabel = false,
+}) {
   const navigate = useNavigate()
   const {
     user,
@@ -31,6 +35,7 @@ export function FavoriteButton({ filme, className = "btnFavorite" }) {
         ? "Filme removido dos favoritos."
         : "Filme adicionado aos favoritos.")
     } catch (error) {
+      console.error("Erro ao atualizar os favoritos:", error)
       toast.error(mensagemErro(error, "Não foi possível atualizar seus favoritos. Tente novamente."))
     } finally {
       setSalvando(false)
@@ -50,6 +55,11 @@ export function FavoriteButton({ filme, className = "btnFavorite" }) {
           : `Entre para favoritar ${filme.title}`}
       >
         {isFavorito ? "❤️" : "🤍"}
+        {showLabel && (
+          <span>
+            {isFavorito ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+          </span>
+        )}
       </button>
     </>
   )

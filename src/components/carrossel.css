@@ -26,11 +26,27 @@
   align-items: center;
 }
 
-.itemCarrossel > img {
+.itemCarrosselFilme {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.itemCarrosselFilme > img {
   display: block;
   width: 280px;
   max-width: 100%;
   height: auto;
+}
+
+.itemCarrosselFilme:focus-visible {
+  outline: 3px solid var(--cor-primaria);
+  outline-offset: 5px;
 }
 
 .botaoCarrossel {

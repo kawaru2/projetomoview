@@ -23,7 +23,11 @@ A ideia central é criar uma interface atrativa para uma aplicação de entreten
 
 - página inicial com identidade visual marcante;
 - navegação por seções e rotas;
-- autenticação simulada com login e recuperação de senha;
+- autenticação com Supabase, confirmação de e-mail e recuperação de senha;
+- catálogo de filmes integrado à TMDB;
+- favoritos privados por usuário;
+- modal com sinopse, gêneros e classificação indicativa;
+- transições suaves entre páginas;
 - layout responsivo e moderno;
 - estrutura preparada para evoluir com catálogo real de filmes.
 
@@ -37,7 +41,8 @@ A ideia central é criar uma interface atrativa para uma aplicação de entreten
 - Navegação entre páginas com React Router
 - Estrutura de contexto para gerenciamento de estado do usuário
 - Layout responsivo e visual clean
-- Base pronta para expansão com catálogo, detalhes de filmes e favoritos
+- Cartões de filmes compartilhados pela página inicial e pelo catálogo
+- Favoritar/remover filmes e consultar sinopses detalhadas
 
 ---
 

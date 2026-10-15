@@ -211,7 +211,7 @@ export function MoviewProvider({ children }) {
       throw new Error("Não foi possível identificar este filme para salvá-lo.")
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("favorites")
       .insert({
         user_id: user.id,
@@ -219,33 +219,36 @@ export function MoviewProvider({ children }) {
         movie_title: filme.title,
         poster_path: filme.poster_path ?? null,
       })
-      .select("id, user_id, movie_id, movie_title, poster_path, created_at")
-      .single()
 
     if (error?.code === "23505") {
-      const { data: favoritoExistente, error: erroBusca } = await supabase
-        .from("favorites")
-        .select("id, user_id, movie_id, movie_title, poster_path, created_at")
-        .eq("user_id", user.id)
-        .eq("movie_id", movieId)
-        .single()
-
-      if (erroBusca) throw erroBusca
-
+      const favoritoExistente = {
+        user_id: user.id,
+        movie_id: movieId,
+        movie_title: filme.title,
+        poster_path: filme.poster_path ?? null,
+        created_at: new Date().toISOString(),
+      }
       setFavoritos(current => [
         favoritoExistente,
-        ...current.filter(favorito => favorito.movie_id !== movieId),
+        ...current.filter(favorito => Number(favorito.movie_id) !== movieId),
       ])
       return favoritoExistente
     }
     if (error) throw error
 
+    const novoFavorito = {
+      user_id: user.id,
+      movie_id: movieId,
+      movie_title: filme.title,
+      poster_path: filme.poster_path ?? null,
+      created_at: new Date().toISOString(),
+    }
     setFavoritos(current => [
-      data,
-      ...current.filter(favorito => favorito.movie_id !== movieId),
+      novoFavorito,
+      ...current.filter(favorito => Number(favorito.movie_id) !== movieId),
     ])
     setErroFavoritos(null)
-    return data
+    return novoFavorito
   }
 
   async function removerFavorito(movieId) {

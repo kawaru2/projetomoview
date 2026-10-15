@@ -2,6 +2,7 @@ import { obterClassiIndicativa } from "../utils/obterClassiIndicativa"
 import { MoviewContext } from "../context/criandoContexto"
 import { useContext } from "react"
 import { obterGeneros } from "../utils/obterGeneros"
+import { FavoriteButton } from "./FavoriteButton"
 import "./modalBio.css"
 export function ModalBio({ filme, setModal }) {
   const { indicacaoIdade, generosFilmes } = useContext(MoviewContext);
@@ -20,19 +21,32 @@ export function ModalBio({ filme, setModal }) {
               {filme.title}
             </h3>
             <p className="lancamentoDoFilme">
-              {filme.release_date.slice(0, 4)}
+              {filme.release_date?.slice(0, 4) ?? "Sem informações"}
             </p>
-            <p className={`classificacaoIndicativa ${obterClassiIndicativa(indicacaoIdade[filme.id])}`}>
-              {indicacaoIdade[filme.id]}
-            </p>
+            {indicacaoIdade[filme.id] && (
+              <p className={`classificacaoIndicativa ${obterClassiIndicativa(indicacaoIdade[filme.id])}`}>
+                {indicacaoIdade[filme.id]}
+              </p>
+            )}
           </div>
           <p className="sinopse">
-            {filme.overview.length == 0 ? "Sem informações" : filme.overview}
+            {filme.overview?.trim() || "Sem informações"}
           </p>
-          <p>{obterGeneros(filme.genre_ids, generosFilmes)}</p>
-          <button className="btnVerMaisFilmes" onClick={setModal}>
-            Fechar
-          </button>
+          <p>{obterGeneros(filme.genre_ids ?? [], generosFilmes)}</p>
+          <div className="acoesModalBio">
+            <FavoriteButton
+              filme={filme}
+              className="btnFavoritoModalBio"
+              showLabel
+            />
+            <button
+              type="button"
+              className="btnVerMaisFilmes"
+              onClick={setModal}
+            >
+              Fechar
+            </button>
+          </div>
         </div>
       </div>
     </div>

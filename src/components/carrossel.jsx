@@ -1,12 +1,13 @@
 import { useRef, useState, useEffect } from "react"
+import { ModalBio } from "./modalBio"
 import "./carrossel.css"
-// import { ModalBio } from "./modalBio";
 
 export function Carrossel({listaFilmes = []}) {
   const trilhoRef = useRef(null);
   const totalFilmes = listaFilmes.slice(0, 6)
   const [ visible, setVisible ] = useState(false);
   const [ filmeAtual, setFilmeAtual ] = useState(0);
+  const [ filmeSelecionado, setFilmeSelecionado ] = useState(null);
   const quantidadeFilmes = totalFilmes.length;
 
   function moverCarrossel(direcao) {
@@ -61,12 +62,19 @@ export function Carrossel({listaFilmes = []}) {
         <ul className="trilhoCarrossel" ref={trilhoRef}>
           {totalFilmes.map(filme => (
             <li key={filme.id} className="itemCarrossel">
-              <img 
-              src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`} 
-              alt={filme.title.length == 0 ? "Sem título" : filme.title} 
-              />
-              <h3>{filme.title}</h3>
-              <p>{filme.release_date.slice(0, 4) ?? "Sem informações"}</p>
+              <button
+                type="button"
+                className="itemCarrosselFilme"
+                onClick={() => setFilmeSelecionado(filme)}
+                aria-label={`Ler biografia de ${filme.title}`}
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
+                  alt=""
+                />
+                <h3>{filme.title}</h3>
+                <p>{filme.release_date?.slice(0, 4) ?? "Sem informações"}</p>
+              </button>
             </li>
             ))}
         </ul>
@@ -88,6 +96,12 @@ export function Carrossel({listaFilmes = []}) {
           )) }
         </nav>
       </div>
+      {filmeSelecionado && (
+        <ModalBio
+          filme={filmeSelecionado}
+          setModal={() => setFilmeSelecionado(null)}
+        />
+      )}
     </>
   )
 }

@@ -22,7 +22,7 @@ export function Home() {
         <div id="apresentacao">
           <h1 id="bemVindoUser">
             {nomeUsuario
-              ? `Olá, ${nomeUsuario}. Seja bem-vindo ao Moview!`
+              ? <>Olá, <span className="nomeUsuarioHome">{nomeUsuario}</span>. Seja bem-vindo ao Moview!</>
               : "Olá, seja-vindo ao Moview!"}
           </h1>
           <p id="subTituloBemVindo">Pesquise sobre filmes, leia a biografia, veja a avaliação e muito mais!</p>
@@ -32,9 +32,9 @@ export function Home() {
           <div id="filmes">
             { filmes.map(filme => {
               return (
-                <div 
-                key={filme ?.id} 
-                className="cardFilme" 
+                <div
+                key={filme ?.id}
+                className="cardFilme"
                 onMouseEnter={() => setCardHover(filme.title)}
                 onMouseLeave={() => setCardHover(null)}
                 >
@@ -50,7 +50,7 @@ export function Home() {
                       obterGeneros(filme.genre_ids, generosFilmes)
                     }
                     </p>
-                </div>
+                  </div>
                   <div className={`overlayFilme ${cardHover === filme.title ? "active" : ""}`}>
                     <button type="button" className="btnVerMais" onClick={() => {
                       setModalFilme(filme);
@@ -83,9 +83,9 @@ export function Home() {
                   filme={modalFilme}
                   className="btnFavorite btnFavoriteModal"
                 />
-                  <p className={`indicacaoIdade ${obterClassiIndicativa(indicacaoIdade[modalFilme.id])}`}>
-                    {indicacaoIdade[modalFilme.id]}
-                  </p>
+                <p className={`indicacaoIdade ${obterClassiIndicativa(indicacaoIdade[modalFilme.id])}`}>
+                  {indicacaoIdade[modalFilme.id]}
+                </p>
               </div>
               <p className="categoriaFilmeModal">{}</p>
               <p className="bioFilmeModal">{modalFilme ?. overview}</p>

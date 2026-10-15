@@ -92,7 +92,7 @@ html, body {
   padding: 0 0 6px;
   font-size: inherit;
   cursor: pointer;
-  background: transparent;
+  background-color: transparent;
   text-align: left;
 }
 
@@ -180,7 +180,7 @@ html, body {
   height: 100vh;
   margin: 0;
   padding: 0;
-  background-image: url("./assets/backgroundLogin.svg");
+  background-image: url("./assets/backgroundLogin.jpg");
   background-position: center bottom;
   background-size: cover;
   background-repeat: no-repeat;
@@ -465,6 +465,23 @@ html, body {
   color: var(--text-default);
 }
 
+#bemVindoUser .nomeUsuarioHome {
+  color: var(--cor-primaria);
+}
+
+.transicaoPagina {
+  animation: transicaoEntradaPagina .3s ease-out both;
+}
+
+@keyframes transicaoEntradaPagina {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 #subTituloBemVindo {
   font-size: 1.3rem;
 }
@@ -564,6 +581,12 @@ html, body {
   font-size: .8rem;
   margin-top: 7px;
   text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transicaoPagina {
+    animation: none;
+  }
 }
 
 /* =================================logo indicacao idade ================================= */

@@ -40,13 +40,43 @@ export function mensagemErro(error, fallback) {
   if (normalizada.includes("row-level security policy")) {
     return "O banco de dados não autorizou esta operação. Verifique as políticas de acesso."
   }
-  if (normalizada.includes('relation "favorites" does not exist')) {
-    return "A lista de favoritos ainda não está configurada no banco de dados."
+  if (
+    codigo === "42501" ||
+    normalizada.includes("permission denied")
+  ) {
+    return "O Supabase bloqueou esta operação. Verifique as permissões e a policy RLS de favoritos."
+  }
+  if (
+    codigo === "42P01" ||
+    codigo === "PGRST205" ||
+    normalizada.includes("could not find the table") ||
+    normalizada.includes('relation "favorites" does not exist')
+  ) {
+    return "O Supabase não encontrou a tabela public.favorites. Aplique a migration de favoritos e recarregue o schema."
+  }
+  if (codigo === "42703" || codigo === "PGRST204") {
+    return "As colunas da tabela de favoritos não correspondem às esperadas pela aplicação."
+  }
+  if (codigo === "23502") {
+    return "Faltam dados obrigatórios para salvar este filme nos favoritos."
+  }
+  if (codigo === "23503") {
+    return "A conta não foi reconhecida pelo banco de dados. Entre novamente e tente."
+  }
+  if (codigo === "22P02" || codigo === "22003") {
+    return "O identificador do filme não é válido para o banco de dados."
+  }
+  if (
+    normalizada.includes("failed to fetch") ||
+    normalizada.includes("networkerror") ||
+    normalizada.includes("load failed")
+  ) {
+    return "Não foi possível conectar ao Supabase. Verifique sua conexão e tente novamente."
   }
 
   if (/[ãõçáéíóúàâêô]/i.test(mensagem)) {
     return mensagem
   }
 
-  return fallback
+  return codigo ? `${fallback} (código ${codigo}).` : fallback
 }
