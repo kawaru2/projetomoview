@@ -116,7 +116,15 @@ src/utils/           Formatação de erros, gêneros e classificação
 GUIA-USO-SUPABASE.md Guia de configuração do Supabase
 GUIA-BACKEND-VERCEL-SUPABASE.md
                      Arquitetura e operação do backend
+docs/                Requisitos, arquitetura, processo, implementação e testes
 ```
+
+Para a documentação de engenharia de software, consulte
+[docs/README.md](./docs/README.md). Ela registra também as lacunas atuais de
+medição de capacidade e elasticidade; não há um número de usuários simultâneos
+validado no repositório. A linha do tempo de desenvolvimento e o vínculo
+retrospectivo entre requisitos, código e verificações estão em
+[docs/processo-engenharia.md](./docs/processo-engenharia.md).
 
 ## Segurança
 
