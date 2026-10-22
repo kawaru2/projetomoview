@@ -42,7 +42,7 @@ Requisitos: Node.js e npm.
    npm install
    ```
 
-3. Crie `.env.local` na raiz do projeto:
+3. Configure estas variáveis no ambiente local:
 
    ```env
    TMDB_READ_ACCESS_TOKEN=seu_token_privado_da_tmdb
@@ -53,10 +53,11 @@ Requisitos: Node.js e npm.
    `TMDB_READ_ACCESS_TOKEN` é um segredo de servidor: não use o prefixo
    `VITE_`. `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` são valores
    públicos do frontend; a chave deve ser Publishable/anon, nunca `Secret` ou
-   `service_role`. `.env.local` é ignorado pelo Git.
+   `service_role`.
 
 4. Prepare Supabase Auth, Redirect URLs e a tabela `public.favorites` com RLS.
-   Siga o [guia de uso do Supabase](./GUIA-USO-SUPABASE.md).
+   Consulte a documentação de [requisitos](./docs/requisitos.md) e
+   [implementação e operação](./docs/implementacao-operacao.md).
 
 5. Inicie a aplicação:
 
@@ -70,8 +71,8 @@ Requisitos: Node.js e npm.
 
 A tabela `favorites` guarda o ID do usuário, ID/título do filme, pôster e
 data de criação. As policies RLS limitam cada usuário aos próprios registros.
-O esquema e as instruções para configurar o SQL Editor estão em
-[GUIA-USO-SUPABASE.md](./GUIA-USO-SUPABASE.md).
+O esquema e as instruções de configuração estão descritos na
+[documentação de requisitos](./docs/requisitos.md).
 
 Na confirmação de cadastro, o Supabase retorna para `/auth/callback`; a
 recuperação de senha usa `/recuperarSenha`. Adicione esses caminhos às
@@ -91,15 +92,15 @@ TMDB. A lista de endpoints permitidos é implementada em
 [`server/tmdb.js`](./server/tmdb.js); os detalhes de cada filme são consultados
 sob demanda para exibir sinopses e o modal.
 
-Consulte [GUIA-BACKEND-VERCEL-SUPABASE.md](./GUIA-BACKEND-VERCEL-SUPABASE.md)
-para entender como o frontend, Vercel, Supabase e TMDB se comunicam.
+Consulte [a documentação de arquitetura](./docs/arquitetura.md) para entender
+como o frontend, Vercel, Supabase e TMDB se comunicam.
 
 ## Scripts
 
 | Comando | Descrição |
 | --- | --- |
 | `npm run dev` | Inicia o servidor local do Vite. |
-| `npm run build` | Gera o build de produção em `dist/`. |
+| `npm run build` | Gera o build de produção. |
 | `npm run preview` | Serve localmente o build de produção. |
 | `npm run lint` | Executa o ESLint. |
 
@@ -113,9 +114,6 @@ src/context/         Sessão, dados de filmes e estado dos favoritos
 src/pages/           Home, catálogo, favoritos, login e outras páginas
 src/service/         Cliente Supabase
 src/utils/           Formatação de erros, gêneros e classificação
-GUIA-USO-SUPABASE.md Guia de configuração do Supabase
-GUIA-BACKEND-VERCEL-SUPABASE.md
-                     Arquitetura e operação do backend
 docs/                Requisitos, arquitetura, processo, implementação e testes
 ```
 
@@ -128,8 +126,7 @@ retrospectivo entre requisitos, código e verificações estão em
 
 ## Segurança
 
-- Nunca publique `.env.local`, tokens da TMDB, chaves `Secret` ou
-  `service_role`.
+- Nunca publique tokens da TMDB, chaves `Secret` ou `service_role`.
 - As operações de favoritos usam a chave pública do Supabase e dependem das
   policies RLS no banco para isolar os dados dos usuários.
 - Não remova nem abra as policies RLS para `anon`.

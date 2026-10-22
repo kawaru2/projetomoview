@@ -1,291 +1,294 @@
 # Testes, desempenho e capacidade
 
-## 1. Evidencias de validacao existentes
+## 1. Evidências de validação existentes
 
-Na revisao que originou esta documentacao:
+Resultados executados localmente neste checkout em 22/10/2026:
 
-| Verificacao | Resultado | Alcance/limitacao |
+| Verificação | Resultado | Alcance/limitação |
 | --- | --- | --- |
-| `npm run lint` | Passou, sem erros reportados. | Analise estatica; nao prova funcionamento em runtime. |
-| `npm run build` | Passou; Vite 8.3.0 gerou build de producao. | Build nao valida credenciais nem servicos remotos. |
+| `npm test` | Passou: 19 testes, 0 falhas. | Cobertura de utilitários de gêneros/classificação/mensagens de erro e da função de backend TMDB, com respostas externas simuladas. Não valida credenciais, serviços remotos nem integração implantada. |
+| `npm run lint` | Passou, sem erros reportados. | Análise estática; não prova funcionamento em runtime. |
+| `npm run build` | Passou; Vite 8.3.0 gerou build de produção. | Build não valida credenciais nem serviços remotos. |
 | Tamanho do bundle | JS principal 550.19 kB minificado e 159.09 kB gzip. | O Vite emitiu aviso por ultrapassar 500 kB minificado. |
-| Testes automatizados no repositorio | Nao foram encontrados arquivos `*.test.*`/`*.spec.*` e o `package.json` nao define script de teste. | Validacao automatizada funcional, integracao e carga permanecem pendentes. |
-| Teste de capacidade existente | Nao localizado. | Nao ha numero validado de usuarios simultaneos, requisicoes/segundo ou elasticidade. |
+| Teste de capacidade existente | Não localizado. | Não há número validado de usuários simultâneos, requisições/segundo ou elasticidade. |
 
-O build e lint foram executados localmente em 21/10/2026. Essa evidencia
-descreve somente este checkout e ambiente e nao certifica deploy remoto.
+Os testes automatizados usam o runner nativo `node:test` e podem ser
+executados com `npm test`. Os casos do backend substituem a chamada `fetch`
+para verificar validações, encaminhamento, cache e tratamento de falhas sem
+acessar a TMDB. Essa evidência descreve somente este checkout e ambiente; não
+certifica deploy remoto, integração com Supabase/TMDB nem capacidade sob carga.
 
 ## 2. Envelope de recursos nos planos gratuitos
 
-Premissa desta analise: Vercel Hobby e Supabase Free, sem upgrade. A tabela
+Premissa desta análise: Vercel Hobby e Supabase Free, sem upgrade. A tabela
 resume cotas publicadas nos documentos oficiais consultados em 21/10/2026.
-Elas podem mudar e o consumo agregado da conta/organizacao/projeto deve ser
-confirmado nos respectivos paineis.
+Elas podem mudar, e o consumo agregado da conta/organização/projeto deve ser
+confirmado nos respectivos painéis.
 
 ### Vercel Hobby
 
-| Recurso | Cota mensal/limite publicado | Consequencia para o Moview |
+| Recurso | Cota mensal/limite publicado | Consequência para o Moview |
 | --- | ---: | --- |
-| CDN requests | 1.000.000 por mes | Cota para requisicoes CDN; o consumo real depende dos recursos solicitados e do cache do navegador. |
-| Fast Data Transfer | 100 GB por mes | Limita entrega dos recursos estaticos ao navegador; imagens de poster sao carregadas diretamente da TMDB, nao do bundle Vercel. |
-| Fast Origin Transfer | 10 GB por mes | Trafego entre a rede Vercel e recursos de computacao, como Functions; respostas de `/api/tmdb` podem contribuir para esse consumo. |
-| Function invocations | 1.000.000 por mes | Chamadas a `/api/tmdb` consomem execucoes quando chegam a funcao; respostas servidas do cache podem evitar execucao. |
-| Active CPU | 4 horas por mes | Pode ser o limite antes da contagem de invocacoes, conforme o tempo de CPU de cada requisicao. |
-| Provisioned memory | 360 GB-horas por mes | Uso depende da memoria provisionada e do tempo da funcao em execucao. |
-| Memoria maxima de uma funcao | 2 GB | Limite por funcao, nao significa que o projeto tenha 2 GB de memoria exclusiva permanente. |
-| Duracao maxima da funcao | 300 segundos no Hobby | Uma requisicao lenta a dependencia externa ainda pode falhar ao atingir o limite. |
-| Concorrencia automatica | Ate 30.000 execucoes simultaneas; burst inicial de ate 1.000 concorrentes por 10 segundos por regiao | Teto/escala de plataforma, nao garantia de que Moview alcance essa concorrencia dentro das cotas mensais ou com latencia aceitavel. A escala pode levar minutos. |
-| Upload estatico por deploy | 100 MB | Limite operacional de deploy; o build atual e inferior a esse teto. |
+| CDN requests | 1.000.000 por mês | Cota para requisições CDN; o consumo real depende dos recursos solicitados e do cache do navegador. |
+| Fast Data Transfer | 100 GB por mês | Limita a entrega dos recursos estáticos ao navegador; imagens de pôster são carregadas diretamente da TMDB, não do bundle Vercel. |
+| Fast Origin Transfer | 10 GB por mês | Tráfego entre a rede Vercel e recursos de computação, como Functions; respostas de `/api/tmdb` podem contribuir para esse consumo. |
+| Function invocations | 1.000.000 por mês | Chamadas a `/api/tmdb` consomem execuções quando chegam à função; respostas servidas do cache podem evitar execução. |
+| Active CPU | 4 horas por mês | Pode ser o limite antes da contagem de invocações, conforme o tempo de CPU de cada requisição. |
+| Provisioned memory | 360 GB-horas por mês | O uso depende da memória provisionada e do tempo de execução da função. |
+| Memória máxima de uma função | 2 GB | Limite por função; não significa que o projeto tenha 2 GB de memória exclusiva permanente. |
+| Duração máxima da função | 300 segundos no Hobby | Uma requisição lenta à dependência externa ainda pode falhar ao atingir o limite. |
+| Concorrência automática | Até 30.000 execuções simultâneas; burst inicial de até 1.000 concorrentes por 10 segundos por região | Teto/escala de plataforma; não é garantia de que o Moview alcance essa concorrência dentro das cotas mensais ou com latência aceitável. A escala pode levar minutos. |
+| Upload estático por deploy | 100 MB | Limite operacional de deploy; o build atual é inferior a esse teto. |
 
-A Vercel tambem publica 5.000 transformacoes de imagem mensais no Hobby;
-Moview recebe posters diretamente da TMDB e nao usa a transformacao de
+A Vercel também publica 5.000 transformações de imagem mensais no Hobby; o
+Moview recebe pôsteres diretamente da TMDB e não usa a transformação de
 imagem da Vercel no fluxo observado. O uso real pode mudar com futuras
-alteracoes.
+alterações.
 
-No Hobby, nao se deve presumir faturamento automatico de excedentes: a
-documentacao informa que, em geral, recursos que excedem as cotas precisam
+No Hobby, não se deve presumir faturamento automático de excedentes: a
+documentação informa que, em geral, recursos que excedem as cotas precisam
 aguardar a janela de 30 dias para voltar a ser utilizados; algumas cotas
-podem ter pausas menores. Planejar alertas e consultar o painel da conta.
+podem ter pausas menores. Planeje alertas e consulte o painel da conta.
 
-#### Estimativas aritmeticas do codigo/build atual
+#### Estimativas aritméticas do código/build atual
 
-- O carregamento inicial do provider faz quatro chamadas de catalogo e,
-  apos receber os resultados, pode fazer ate tres chamadas de classificacao
-  indicativa: ate sete requisicoes iniciais a `/api/tmdb`. Abertura de
-  biografias e carregamento de sinopses de favoritos podem acrescentar
-  requisicoes.
-- Dividindo 1.000.000 de invocacoes por sete, obtem-se **aproximadamente
-  142.857 carregamentos de catalogo sem cache por mes** como teto aritmetico
-  baseado somente na contagem de invocacoes. Isso pressupoe que todas as sete
-  chamadas cheguem a funcao, sem repeticoes, detalhes, favoritos, retries ou
-  outras rotas. Nao e uma previsao de sessoes suportadas: a funcao tambem tem
-  cotas de CPU/memoria, e o cache `s-maxage=300` pode reduzir invocacoes para
+- O carregamento inicial do provider faz quatro chamadas de catálogo e,
+  após receber os resultados, pode fazer até três chamadas de classificação
+  indicativa: até sete requisições iniciais a `/api/tmdb`. A abertura de
+  biografias e o carregamento de sinopses de favoritos podem acrescentar
+  requisições.
+- Dividindo 1.000.000 de invocações por sete, obtém-se **aproximadamente
+  142.857 carregamentos de catálogo sem cache por mês** como teto aritmético
+  baseado somente na contagem de invocações. Isso pressupõe que todas as sete
+  chamadas cheguem à função, sem repetições, detalhes, favoritos, retries ou
+  outras rotas. Não é uma previsão de sessões suportadas: a função também tem
+  cotas de CPU/memória, e o cache `s-maxage=300` pode reduzir invocações para
   respostas repetidas.
 - No build medido, HTML, JS comprimido e CSS comprimido somam cerca de
   168 kB; incluir a imagem de fundo do login eleva o conjunto para cerca de
-  421 kB. Dividir 100 GB por esses tamanhos da um teto aritmetico aproximado
+  421 kB. Dividir 100 GB por esses tamanhos dá um teto aritmético aproximado
   de **594 mil carregamentos sem a imagem** ou **237 mil com a imagem**, por
-  mes. Sao cenarios de transferencia fria do bundle, antes de outras
-  requisicoes, variacoes de resposta e bytes de protocolo; cache do navegador
-  pode reduzir transferencia em visitas repetidas.
-- Com quatro requisicoes CDN por primeiro carregamento, 1.000.000 de
-  requisicoes corresponderia aritmeticamente a cerca de 250 mil
-  carregamentos. Na pratica, HTML/arquivos auxiliares, chamadas de API,
-  navegacao, cache do navegador e outros projetos da conta alteram o total.
+  mês. São cenários de transferência fria do bundle, antes de outras
+  requisições, variações de resposta e bytes de protocolo; o cache do navegador
+  pode reduzir a transferência em visitas repetidas.
+- Com quatro requisições CDN por primeiro carregamento, 1.000.000 de
+  requisições corresponderia aritmeticamente a cerca de 250 mil
+  carregamentos. Na prática, HTML/arquivos auxiliares, chamadas de API,
+  navegação, cache do navegador e outros projetos da conta alteram o total.
 
-Essas estimativas sao cenarios simplificados e nao devem ser somadas como se
-fossem capacidade simultanea. O primeiro recurso a atingir sua cota varia com
-o cache, a distribuicao de trafego, as duracoes e o bundle servido.
+Essas estimativas são cenários simplificados e não devem ser somadas como se
+fossem capacidade simultânea. O primeiro recurso a atingir sua cota varia com
+o cache, a distribuição de tráfego, as durações e o bundle servido.
 
 ### Supabase Free
 
-| Recurso | Cota publicada | Consequencia para o Moview |
+| Recurso | Cota publicada | Consequência para o Moview |
 | --- | ---: | --- |
-| Usuarios ativos mensais (MAU) | 50.000 incluidos | Limite de usuarios ativos medido por mes, nao 50.000 usuarios simultaneos nem promessa de throughput. |
-| Tamanho do banco por projeto | 500 MB | Limita o total persistido, incluindo dados e estruturas do banco. O tamanho real de cada favorito, indices e overhead precisa ser medido. |
-| Compute do banco | Nano, CPU compartilhada, ate 0,5 GB RAM | Capacidade depende de consultas, concorrencia, cache do banco e carga compartilhada; nao ha conversao direta para usuarios. |
-| Egress | 5 GB por mes | Inclui trafego de saida do Supabase, por exemplo respostas de consultas de favoritos. |
-| Cached egress | 5 GB por mes | Cota separada indicada no plano; a aplicabilidade depende do tipo de resposta/camada cacheada. |
-| File storage | 1 GB | O fluxo observado guarda os caminhos de posters, nao os arquivos de imagem, no Supabase. |
-| Pausa por inatividade | Projetos Free podem ser pausados apos uma semana de baixa atividade | Pode exigir reativacao pelo painel e afetar disponibilidade. |
-| Backup baixavel do banco | Nao incluido no Free | Definir estrategia de backup/exportacao compativel com as necessidades antes de depender do projeto como unica copia. |
-| API requests | Anunciadas como ilimitadas | "Ilimitadas" nao significa compute, egress, conexoes, taxa de Auth ou latencia ilimitados. |
-| E-mail Auth no provedor padrao | 2 e-mails por hora por projeto | Se o app usa o provedor de e-mail padrao, confirmacoes e recuperacoes podem ficar limitadas; verificar a configuracao SMTP efetiva. |
+| Usuários ativos mensais (MAU) | 50.000 incluídos | Limite de usuários ativos medido por mês; não são 50.000 usuários simultâneos nem promessa de throughput. |
+| Tamanho do banco por projeto | 500 MB | Limita o total persistido, incluindo dados e estruturas do banco. O tamanho real de cada favorito, índices e overhead precisa ser medido. |
+| Compute do banco | Nano, CPU compartilhada, até 0,5 GB RAM | A capacidade depende de consultas, concorrência, cache do banco e carga compartilhada; não há conversão direta para usuários. |
+| Egress | 5 GB por mês | Inclui tráfego de saída do Supabase, por exemplo, respostas de consultas de favoritos. |
+| Cached egress | 5 GB por mês | Cota separada indicada no plano; a aplicabilidade depende do tipo de resposta/camada cacheada. |
+| File storage | 1 GB | O fluxo observado guarda os caminhos de pôsteres, não os arquivos de imagem, no Supabase. |
+| Pausa por inatividade | Projetos Free podem ser pausados após uma semana de baixa atividade | Pode exigir reativação pelo painel e afetar a disponibilidade. |
+| Backup baixável do banco | Não incluído no Free | Definir estratégia de backup/exportação compatível com as necessidades antes de depender do projeto como única cópia. |
+| API requests | Anunciadas como ilimitadas | “Ilimitadas” não significa compute, egress, conexões, taxa de Auth ou latência ilimitados. |
+| E-mail Auth no provedor padrão | 2 e-mails por hora por projeto | Se o app usa o provedor de e-mail padrão, confirmações e recuperações podem ficar limitadas; verificar a configuração SMTP efetiva. |
 
-As taxas padrao documentadas de Auth tambem incluem limites por IP, como
-30 requisicoes de cadastro/login/recuperacao por 5 minutos e 150 requisicoes
-ao endpoint de token por 5 minutos. Ha limites por usuario para reenvio de
-confirmacao e recuperacao. Consultar a configuracao real do projeto antes de
+As taxas padrão documentadas de Auth também incluem limites por IP, como
+30 requisições de cadastro/login/recuperação por 5 minutos e 150 requisições
+ao endpoint de token por 5 minutos. Há limites por usuário para reenvio de
+confirmação e recuperação. Consulte a configuração real do projeto antes de
 um ensaio; erros de limite retornam HTTP 429.
 
 ### Leitura de capacidade
 
-- Um limite de 50.000 MAU do Supabase descreve inclusao no plano, nao
-  concorrencia testada. Nao e valido reportar "50.000 usuarios simultaneos".
-- Um maximo de 30.000 concorrencias da Vercel e um limite de plataforma de
-  funcoes, nao a concorrencia suportavel pelo banco/TMDB ou pelo conjunto do
-  Moview. O burst inicial e o escalonamento gradual tambem afetam picos.
-- A cota de 1.000.000 de invocacoes e mensal; ela nao define uma taxa
-  instantanea garantida. CPU, memoria provisionada, transferencia, cache,
+- Um limite de 50.000 MAU do Supabase descreve a inclusão no plano, não a
+  concorrência testada. Não é válido reportar “50.000 usuários simultâneos”.
+- Um máximo de 30.000 concorrências da Vercel é um limite de plataforma de
+  funções, não a concorrência suportável pelo banco/TMDB ou pelo conjunto do
+  Moview. O burst inicial e o escalonamento gradual também afetam os picos.
+- A cota de 1.000.000 de invocações é mensal; ela não define uma taxa
+  instantânea garantida. CPU, memória provisionada, transferência, cache,
   limites de Supabase Auth, banco e TMDB podem se esgotar antes.
-- O banco e compartilhado e possui apenas ate 0,5 GB de RAM no compute Nano.
-  Sem uma carga de referencia e teste, nao e possivel estimar quantas
-  operacoes de favoritos por segundo ele sustentara.
-- O Moview nao controla os limites da TMDB. Verificar termos, quotas e
+- O banco é compartilhado e possui apenas até 0,5 GB de RAM no compute Nano.
+  Sem uma carga de referência e teste, não é possível estimar quantas
+  operações de favoritos por segundo ele sustentará.
+- O Moview não controla os limites da TMDB. Verifique os termos, as cotas e a
   resposta de rate limit vigentes com esse fornecedor antes de aumentar a
   carga.
 
-**Conclusao operacional:** as cotas mensais fornecem um envelope de uso do
-plano, mas a concorrencia efetiva do software permanece nao medida. As
-estimativas acima dimensionam alguns limites de consumo; nao constituem
-garantia de usuarios, sessoes, RPS ou SLA.
+**Conclusão operacional:** as cotas mensais fornecem um envelope de uso do
+plano, mas a concorrência efetiva do software permanece não medida. As
+estimativas acima dimensionam alguns limites de consumo; não constituem
+garantia de usuários, sessões, RPS ou SLA.
 
-## 3. O que ainda nao pode ser afirmado
+## 3. O que ainda não pode ser afirmado
 
-Sem um ensaio controlado e dados do ambiente implantado, nao declarar:
+Sem um ensaio controlado e dados do ambiente implantado, não declare:
 
-- quantidade maxima de usuarios simultaneos;
-- requisicoes por segundo ou transacoes por segundo sustentaveis;
+- quantidade máxima de usuários simultâneos;
+- requisições por segundo ou transações por segundo sustentáveis;
 - tempo de resposta p95/p99 sob carga;
 - percentual de disponibilidade ou SLA;
-- elasticidade linear/automatica, fator de escala ou tempo de escalonamento;
-- capacidade maxima do Supabase, Vercel ou TMDB;
-- ausencia de falhas em condicoes de pico.
+- elasticidade linear/automática, fator de escala ou tempo de escalonamento;
+- capacidade máxima do Supabase, Vercel ou TMDB;
+- ausência de falhas em condições de pico.
 
-Esses valores dependem do plano contratado, regioes, configuracao, limites
-vigentes, cache, perfil de interacao e servicos externos. O desenho serverless
-nao fornece, isoladamente, um limite numerico.
+Esses valores dependem do plano contratado, das regiões, da configuração, dos
+limites vigentes, do cache, do perfil de interação e dos serviços externos. O
+desenho serverless não fornece, isoladamente, um limite numérico.
 
-## 4. Protocolo proposto para teste de carga
+### 3.1 Protocolo proposto para teste de carga
 
-O protocolo e uma recomendacao de engenharia, nao um resultado ja executado.
+O protocolo é uma recomendação de engenharia, não um resultado já executado.
 
-### 3.1 Preparacao
+#### 3.1.1 Preparação
 
-1. Usar staging equivalente a producao em versoes, regiao e planos. Nao gerar
-   carga contra contas de usuarios reais.
-2. Consultar e registrar limites/quota atuais da Vercel, Supabase e TMDB.
-   Confirmar autorizacao e limites para teste com os provedores.
-3. Criar dados sinteticos e contas controladas. Usar contas separadas para
+1. Usar staging equivalente à produção em versões, região e planos. Não gerar
+   carga contra contas de usuários reais.
+2. Consultar e registrar limites/cotas atuais da Vercel, Supabase e TMDB.
+   Confirmar autorização e limites para teste com os provedores.
+3. Criar dados sintéticos e contas controladas. Usar contas separadas para
    verificar isolamento RLS.
-4. Definir perfil realista de jornada (home, catalogo, abrir detalhe,
-   autenticar e operar favoritos), proporcao por operacao, tempo de pausa e
+4. Definir perfil realista de jornada (home, catálogo, abrir detalhe,
+   autenticar e operar favoritos), proporção por operação, tempo de pausa e
    cache frio/quente.
-5. Definir previamente criterio de sucesso com responsavel de produto e
-   operacoes: carga alvo, duracao, p95/p99, taxa de erro, consumo de quota e
-   limites de custo. Nao usar valores padrao sem aprovacao.
-6. Ativar observabilidade para frontend, funcao, banco, autenticacao e
-   dependencias; garantir que tokens e dados pessoais nao sejam registrados.
+5. Definir previamente o critério de sucesso com o responsável de produto e
+   operações: carga-alvo, duração, p95/p99, taxa de erro, consumo de cotas e
+   limites de custo. Não usar valores padrão sem aprovação.
+6. Ativar observabilidade para frontend, função, banco, autenticação e
+   dependências; garantir que tokens e dados pessoais não sejam registrados.
 
-### 3.2 Execucao
+#### 3.1.2 Execução
 
 1. Fazer aquecimento controlado, separando resultados de cache frio e quente.
-2. Aumentar concorrencia em etapas; manter cada etapa pelo periodo acordado.
-3. Executar uma etapa sustentada na carga alvo e depois testar um pico apenas
-   se quotas e autorizacao permitirem.
-4. Registrar usuarios virtuais concorrentes, requisicoes/segundo, duracao,
-   mix de operacoes, erros, latencias p50/p95/p99, timeouts, respostas
-   429/5xx, saturacao e consumo/quota de cada provedor.
-5. Interromper se houver risco de custo, violacao de quota, degradacao severa
-   ou impacto em usuarios.
-6. Repetir cada cenario em condicoes comparaveis e registrar variacao.
+2. Aumentar a concorrência em etapas; manter cada etapa pelo período acordado.
+3. Executar uma etapa sustentada na carga-alvo e depois testar um pico apenas
+   se as cotas e a autorização permitirem.
+4. Registrar usuários virtuais concorrentes, requisições/segundo, duração,
+   mix de operações, erros, latências p50/p95/p99, timeouts, respostas
+   429/5xx, saturação e consumo/cotas de cada provedor.
+5. Interromper se houver risco de custo, violação de cota, degradação severa
+   ou impacto em usuários.
+6. Repetir cada cenário em condições comparáveis e registrar variações.
 
-### 3.3 Criterios e interpretacao
+#### 3.1.3 Critérios e interpretação
 
-O limite demonstrado deve ser a maior carga que satisfaz todos os criterios
-acordados durante a duracao definida, nao o primeiro pico em que a pagina
-carregou. Informar separadamente:
+O limite demonstrado deve ser a maior carga que satisfaz todos os critérios
+acordados durante a duração definida, não o primeiro pico em que a página
+carregou. Informe separadamente:
 
-- capacidade sustentada e capacidade de pico;
-- usuario concorrente versus requisicao concorrente;
+- capacidade sustentada e de pico;
+- usuário concorrente versus requisição concorrente;
 - resultados com cache frio e quente;
-- limitacao que primeiro ocorreu (funcao, banco, auth ou TMDB);
-- margem, variabilidade e configuracao do experimento.
+- limitação que ocorreu primeiro (função, banco, auth ou TMDB);
+- margem, variabilidade e configuração do experimento.
 
-O resultado e valido apenas para a configuracao e data testadas. Alterar
-plano, regiao, codigo, politicas, limites ou comportamento de cache requer
-nova medicao.
+O resultado é válido apenas para a configuração e a data testadas. Alterar
+plano, região, código, políticas, limites ou comportamento de cache requer
+nova medição.
 
-## 5. Como medir elasticidade
+## 4. Como medir elasticidade
 
-Elasticidade nao e um unico numero sem uma definicao operacional. Para este
-sistema, medir:
+Elasticidade não é um único número sem uma definição operacional. Para este
+sistema, meça:
 
-- crescimento de capacidade/throughput ao elevar carga;
-- latencia e taxa de erro em cada patamar;
-- tempo de deteccao e resposta a aumento de carga, se houver metricas
-  disponiveis;
-- comportamento ao reduzir carga (recursos/consumo e recuperacao);
-- limite de quotas e erros de dependencia;
-- custo por volume de requisicoes ou jornada, conforme dados do provedor.
+- crescimento de capacidade/throughput ao elevar a carga;
+- latência e taxa de erro em cada patamar;
+- tempo de detecção e resposta ao aumento de carga, se houver métricas
+  disponíveis;
+- comportamento ao reduzir a carga (recursos/consumo e recuperação);
+- limite de cotas e erros de dependência;
+- custo por volume de requisições ou jornada, conforme os dados do provedor.
 
-Registrar graficos e series temporais, configuracao e momento da medicao.
-Distinguir escalonamento automatico da infraestrutura de cache, que reduz
-chamadas repetidas, e de limites/quota de servicos gerenciados.
+Registre gráficos e séries temporais, a configuração e o momento da medição.
+Distingua o escalonamento automático da infraestrutura do cache, que reduz
+chamadas repetidas, e dos limites/cotas de serviços gerenciados.
 
-## 6. Testes funcionais recomendados
+## 5. Testes funcionais recomendados
 
-Como nao ha suite automatizada visivel no repositorio, criar testes para
+Como não há suíte automatizada visível no repositório, crie testes para
 cobrir ao menos:
 
-- handler TMDB: metodo nao permitido, endpoint fora da allowlist,
-  parametros invalidos, token ausente, resposta de erro e falha de rede;
-- sessao: inicializacao, login, logout, callback de confirmacao e recuperacao;
-- favoritos: adicionar, remover, duplicata, erro de rede e mudanca de usuario;
-- RLS: duas contas nao podem ler, inserir em nome de, ou excluir favoritos
+- handler TMDB: método não permitido, endpoint fora da allowlist,
+  parâmetros inválidos, token ausente, resposta de erro e falha de rede;
+- sessão: inicialização, login, logout, callback de confirmação e recuperação;
+- favoritos: adicionar, remover, duplicata, erro de rede e mudança de usuário;
+- RLS: duas contas não podem ler, inserir em nome de ou excluir favoritos
   uma da outra;
-- navegacao direta/refresh nas rotas SPA publicadas;
-- mensagens de erro, estado de carregamento e operacao sem configuracao do
+- navegação direta/refresh nas rotas SPA publicadas;
+- mensagens de erro, estado de carregamento e operação sem configuração do
   Supabase;
-- regressao visual/responsividade e acessibilidade por teclado/leitor de tela.
+- regressão visual/responsividade e acessibilidade por teclado/leitor de tela.
 
-Testes de integracao contra Supabase/TMDB devem usar ambientes e credenciais
-controlados. Nao compartilhar segredos com CI ou incluir tokens em fixtures.
+Testes de integração contra Supabase/TMDB devem usar ambientes e credenciais
+controlados. Não compartilhe segredos com CI nem inclua tokens em fixtures.
 
-## 7. Registro de resultados
+## 6. Registro de resultados
 
-Para cada execucao, preencher:
+Para cada execução, preencha:
 
 | Campo | Valor a registrar |
 | --- | --- |
-| Data e responsavel | A preencher |
-| Commit/versao da aplicacao | A preencher |
-| Ambiente, regiao e planos | A preencher |
-| Versoes e configuracao dos provedores | A preencher |
-| Perfil de carga e duracao | A preencher |
-| Concorrencia e RPS observados | A preencher |
-| Latencia p50/p95/p99 | A preencher |
+| Data e responsável | A preencher |
+| Commit/versão da aplicação | A preencher |
+| Ambiente, região e planos | A preencher |
+| Versões e configuração dos provedores | A preencher |
+| Perfil de carga e duração | A preencher |
+| Concorrência e RPS observados | A preencher |
+| Latência p50/p95/p99 | A preencher |
 | Erros/timeouts/429/5xx | A preencher |
 | Cache frio/quente | A preencher |
-| Quotas/custo/saturacao | A preencher |
-| Resultado e limitacao encontrada | A preencher |
+| Cotas/custo/saturação | A preencher |
+| Resultado e limitação encontrada | A preencher |
 
-**Conclusao atual:** sem execucao registrada, a capacidade e a elasticidade do
-Moview permanecem **nao determinadas**.
+**Conclusão atual:** sem execução registrada, a capacidade e a elasticidade do
+Moview permanecem **não determinadas**.
 
-## 8. Reprodutibilidade e validade
+## 7. Reprodutibilidade e validade
 
-Para que outra pessoa consiga repetir e interpretar uma verificacao, arquivar
+Para que outra pessoa consiga repetir e interpretar uma verificação, arquive
 com o resultado:
 
-- hash do commit, versoes do Node.js/npm e dependencias instaladas;
-- ambiente, regiao, planos e configuracoes efetivas dos provedores;
-- versoes/data das documentacoes oficiais consultadas para limites, quotas e
-  autorizacao de carga;
-- scripts de teste e parametros usados, sem segredos ou dados pessoais;
-- conjunto de dados sinteticos ou procedimento para recria-lo;
-- criterios de sucesso definidos antes da execucao, resultados brutos
-  agregados e metodo de calculo das metricas;
-- desvios, falhas, repeticoes, limitacoes e qualquer alteracao de configuracao
+- hash do commit, versões do Node.js/npm e dependências instaladas;
+- ambiente, região, planos e configurações efetivas dos provedores;
+- versões/data das documentações oficiais consultadas para limites, cotas e
+  autorização de carga;
+- scripts de teste e parâmetros usados, sem segredos ou dados pessoais;
+- conjunto de dados sintéticos ou procedimento para recriá-lo;
+- critérios de sucesso definidos antes da execução, resultados brutos
+  agregados e método de cálculo das métricas;
+- desvios, falhas, repetições, limitações e qualquer alteração de configuração
   durante o ensaio.
 
-As conclusoes nao devem ser generalizadas para outras regioes, planos,
-periodos, perfis de carga ou versoes sem evidencias adicionais. Relatar
-dependencias externas, tamanho da amostra, variabilidade e possiveis vieses.
-Preservar dados brutos de forma segura e compartilhar apenas informacoes
-necessarias, sem credenciais, identificadores de usuarios ou outros dados
+As conclusões não devem ser generalizadas para outras regiões, planos,
+períodos, perfis de carga ou versões sem evidências adicionais. Relate
+dependências externas, tamanho da amostra, variabilidade e possíveis vieses.
+Preserve dados brutos de forma segura e compartilhe apenas informações
+necessárias, sem credenciais, identificadores de usuários ou outros dados
 pessoais.
 
-Ao documentar o metodo de desenvolvimento ou citar praticas/criterios de
-engenharia, registrar o processo realmente utilizado, fontes tecnicas
-consultadas e suas versoes/datas. O repositorio atual nao registra metodologia
-formal nem referencias bibliograficas; nao apresentar um processo ou fonte
-como aplicado sem confirmacao.
+Ao documentar o método de desenvolvimento ou citar práticas/critérios de
+engenharia, registre o processo realmente utilizado, as fontes técnicas
+consultadas e suas versões/datas. O repositório atual não registra metodologia
+formal nem referências bibliográficas; não apresente um processo ou uma fonte
+como aplicados sem confirmação.
 
 ## Fontes oficiais de cotas
 
-Valores consultados em 21/10/2026; confirmar novamente antes de operar ou
+Valores consultados em 21/10/2026; confirme-os novamente antes de operar ou
 alterar limites:
 
-- [Vercel pricing](https://vercel.com/pricing) — precos e cotas por plano.
+- [Vercel pricing](https://vercel.com/pricing) — preços e cotas por plano.
 - [Vercel Hobby plan](https://vercel.com/docs/plans/hobby) — uso mensal
-  incluido e comportamento quando cotas sao excedidas.
+  incluído e comportamento quando cotas são excedidas.
 - [Vercel limits](https://vercel.com/docs/limits) — limites gerais de conta e
   deploy.
 - [Vercel Functions limits](https://vercel.com/docs/functions/limitations)
-  — memoria, duracao e limites das funcoes.
+  — memória, duração e limites das funções.
 - [Vercel concurrency scaling](https://vercel.com/docs/functions/concurrency-scaling)
-  — concorrencia maxima, burst e escala automatica.
+  — concorrência máxima, burst e escala automática.
 - [Vercel fair use guidelines](https://vercel.com/docs/limits/fair-use-guidelines)
   — uso comercial permitido e regras de uso.
 - [Supabase pricing](https://supabase.com/pricing) — cotas Free, incluindo
@@ -293,6 +296,6 @@ alterar limites:
 - [Supabase compute and disk](https://supabase.com/docs/guides/platform/compute-and-disk)
   — compute Nano e limites de banco.
 - [Supabase production checklist](https://supabase.com/docs/guides/deployment/going-into-prod)
-  — pausa por inatividade e consideracoes operacionais do plano gratuito.
+  — pausa por inatividade e considerações operacionais do plano gratuito.
 - [Supabase Auth rate limits](https://supabase.com/docs/guides/auth/rate-limits)
-  — limites de e-mail e requisicoes de autenticacao.
+  — limites de e-mail e requisições de autenticação.
